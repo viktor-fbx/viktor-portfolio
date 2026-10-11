@@ -1,23 +1,27 @@
 ---
 import LanguageSwitcher from "./LanguageSwitcher.astro";
 import { translations } from "../i18n/translations";
+import { getLangFromUrl, localePath } from "../i18n/utils";
 
-const url = new URL(Astro.request.url);
-const langParam = url.searchParams.get("lang");
-const lang = (langParam as keyof typeof translations) || "es";
+const lang = getLangFromUrl(Astro.url);
 const t = translations[lang];
 
-// Determinar si estamos en la página principal
-const isHomePage = Astro.url.pathname === "/";
+const homePath = localePath(lang);
+const normalize = (p: string) => p.replace(/\/$/, "");
+// Página principal = /es, /en o /fr (con o sin barra final)
+const isHomePage = normalize(Astro.url.pathname) === normalize(homePath);
+const galleryPath = localePath(lang, "/projects/3D-gallery/");
+const anchor = (id: string) => (isHomePage ? `#${id}` : `${homePath}#${id}`);
 ---
 
 <header
+    data-home={isHomePage ? "true" : "false"}
     class="sticky top-4 flex justify-between items-center mx-4 sm:mx-auto w-full sm:w-[95%] lg:w-[1120px] rounded-full px-4 sm:px-6 py-2 my-4 bg-white/10 backdrop-blur-md border-white border-1 inset-shadow-sm shadow-md z-50"
 >
-    <a href={`/?lang=${lang}`} class="flex-shrink-0">
+    <a href={homePath} class="flex-shrink-0">
         <img
             src="/media/img/Viktor-logo-liquid-metal.png"
-            alt="Viktor liquid metal logo"
+            alt={t.a11y.logoAlt}
             width={85}
             height={85}
             class="w-[50px] sm:w-[70px] lg:w-[85px] h-auto"
@@ -29,41 +33,39 @@ const isHomePage = Astro.url.pathname === "/";
         class="hidden md:flex flex-row gap-x-6 lg:gap-x-8 justify-center opacity-70 text-base lg:text-md"
     >
         <a
-            href={isHomePage ? "#about" : `/?lang=${lang}#about`}
+            href={anchor("about")}
             class="hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-1 nav-link"
         >
             {t.nav.about}
         </a>
         <a
-            href={isHomePage ? "#skills" : `/?lang=${lang}#skills`}
+            href={anchor("skills")}
             class="hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-1 nav-link"
         >
             {t.nav.skills}
         </a>
         <a
-            href={isHomePage ? "#projects" : `/?lang=${lang}#projects`}
+            href={anchor("projects")}
             class="hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-1 nav-link"
         >
             {t.nav.projects}
         </a>
         <a
-            href="/projects/3D-gallery/"
+            href={galleryPath}
             class="hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-1 nav-link"
         >
-            {t.gallery.title || "3D Gallery"}
+            {t.gallery.title}
         </a>
     </nav>
 
     <div class="flex items-center gap-x-3 sm:gap-x-4">
-        <!-- <div class="hidden sm:block">
-            <LanguageSwitcher />
-        </div> -->
+        <LanguageSwitcher />
 
         <button
             class="md:hidden flex flex-col justify-center items-center w-8 h-8 relative group"
             id="menu-toggle"
             type="button"
-            aria-label="Abrir menú"
+            aria-label={t.a11y.openMenu}
         >
             <span
                 class="w-6 h-0.5 bg-blue-900/70 mb-1.5 transition-all duration-300 group-[.active]:rotate-45 group-[.active]:mb-0 group-[.active]:translate-y-1"
@@ -84,137 +86,111 @@ const isHomePage = Astro.url.pathname === "/";
     >
         <nav class="flex flex-col gap-2">
             <a
-                href={isHomePage ? "#about" : `/?lang=${lang}#about`}
+                href={anchor("about")}
                 class="text-blue-900/70 font-medium hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-3 px-4 rounded-lg hover:bg-white/20 text-center nav-link"
                 data-menu-close
             >
                 {t.nav.about}
             </a>
             <a
-                href={isHomePage ? "#skills" : `/?lang=${lang}#skills`}
+                href={anchor("skills")}
                 class="text-blue-900/70 font-medium hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-3 px-4 rounded-lg hover:bg-white/20 text-center nav-link"
                 data-menu-close
             >
                 {t.nav.skills}
             </a>
             <a
-                href={isHomePage ? "#projects" : `/?lang=${lang}#projects`}
+                href={anchor("projects")}
                 class="text-blue-900/70 font-medium hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-3 px-4 rounded-lg hover:bg-white/20 text-center nav-link"
                 data-menu-close
             >
                 {t.nav.projects}
             </a>
             <a
-                href="/projects/3D-gallery/"
+                href={galleryPath}
                 class="text-blue-900/70 font-medium hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-3 px-4 rounded-lg hover:bg-white/20 text-center nav-link"
                 data-menu-close
             >
-                {t.gallery.title || "3D Gallery"}
+                {t.gallery.title}
             </a>
 
-            <!-- <div class="bg-white/50 pt-3 border-t border-white/20 mt-2">
-                <div class="flex justify-center">
-                    <LanguageSwitcher />
-                </div>
-            </div> -->
         </nav>
     </div>
 
-    <script is:inline>
-        document.addEventListener("DOMContentLoaded", function () {
-            var menuToggle = document.getElementById("menu-toggle");
-            var mobileMenu = document.getElementById("mobile-menu");
-            var menuCloseItems = document.querySelectorAll("[data-menu-close]");
-            var navLinks = document.querySelectorAll(".nav-link");
+    <script>
+        // Módulo: se ejecuta una sola vez. Los listeners por página se
+        // enganchan en "astro:page-load" (carga inicial y cada navegación).
+        function closeMenu() {
+            const menuToggle = document.getElementById("menu-toggle");
+            const mobileMenu = document.getElementById("mobile-menu");
+            if (!menuToggle || !mobileMenu) return;
+            menuToggle.classList.remove("active");
+            mobileMenu.classList.add("opacity-0", "invisible", "translate-y-2");
+            mobileMenu.classList.remove("opacity-100", "visible", "translate-y-0");
+        }
 
+        function toggleMenu() {
+            const menuToggle = document.getElementById("menu-toggle");
+            const mobileMenu = document.getElementById("mobile-menu");
+            if (!menuToggle || !mobileMenu) return;
+            menuToggle.classList.toggle("active");
+            mobileMenu.classList.toggle("opacity-0");
+            mobileMenu.classList.toggle("invisible");
+            mobileMenu.classList.toggle("translate-y-2");
+            mobileMenu.classList.toggle("opacity-100");
+            mobileMenu.classList.toggle("visible");
+            mobileMenu.classList.toggle("translate-y-0");
+        }
+
+        // Listeners de documento: se registran una vez y buscan el DOM actual
+        document.addEventListener("click", (event) => {
+            const target = event.target as Node;
+            const menuToggle = document.getElementById("menu-toggle");
+            const mobileMenu = document.getElementById("mobile-menu");
             if (!menuToggle || !mobileMenu) return;
 
-            function toggleMenu() {
-                menuToggle.classList.toggle("active");
-                mobileMenu.classList.toggle("opacity-0");
-                mobileMenu.classList.toggle("invisible");
-                mobileMenu.classList.toggle("translate-y-2");
-                mobileMenu.classList.toggle("opacity-100");
-                mobileMenu.classList.toggle("visible");
-                mobileMenu.classList.toggle("translate-y-0");
-            }
-
-            function closeMenu() {
-                menuToggle.classList.remove("active");
-                mobileMenu.classList.add(
-                    "opacity-0",
-                    "invisible",
-                    "translate-y-2",
-                );
-                mobileMenu.classList.remove(
-                    "opacity-100",
-                    "visible",
-                    "translate-y-0",
-                );
-            }
-
-            navLinks.forEach(function (link) {
-                link.addEventListener("click", function (e) {
-                    var href = this.getAttribute("href");
-
-                    // Si es un anchor link y estamos en la página principal
-                    if (
-                        href.includes("#") &&
-                        window.location.pathname === "/"
-                    ) {
-                        e.preventDefault();
-
-                        var targetId = href.split("#")[1];
-                        var targetElement = document.getElementById(targetId);
-
-                        if (targetElement) {
-                            closeMenu();
-
-                            targetElement.scrollIntoView({
-                                behavior: "smooth",
-                                block: "start",
-                            });
-
-                            // Actualizar URL sin recargar
-                            window.history.pushState(null, "", href);
-                        }
-                    }
-                    // Los links que van a otras páginas se manejan normalmente
-                });
-            });
-
-            function getCurrentLang() {
-                var urlParams = new URLSearchParams(window.location.search);
-                return urlParams.get("lang") || "es";
-            }
-
-            menuToggle.addEventListener("click", function (event) {
+            if (menuToggle.contains(target)) {
                 event.stopPropagation();
                 toggleMenu();
-            });
+                return;
+            }
+            if (
+                mobileMenu.classList.contains("opacity-100") &&
+                !mobileMenu.contains(target)
+            ) {
+                closeMenu();
+            }
+        });
 
-            menuCloseItems.forEach(function (item) {
-                item.addEventListener("click", closeMenu);
-            });
+        document.addEventListener("keydown", (event) => {
+            const mobileMenu = document.getElementById("mobile-menu");
+            if (event.key === "Escape" && mobileMenu?.classList.contains("opacity-100")) {
+                closeMenu();
+            }
+        });
 
-            document.addEventListener("click", function (event) {
-                if (!mobileMenu.classList.contains("opacity-100")) return;
+        document.addEventListener("astro:page-load", () => {
+            const header = document.querySelector("header[data-home]");
+            const isHome = header?.getAttribute("data-home") === "true";
 
-                var clickInsideMenu = mobileMenu.contains(event.target);
-                var clickOnToggle = menuToggle.contains(event.target);
+            document.querySelectorAll("[data-menu-close]").forEach((item) =>
+                item.addEventListener("click", closeMenu),
+            );
 
-                if (!clickInsideMenu && !clickOnToggle) {
-                    closeMenu();
-                }
-            });
-
-            document.addEventListener("keydown", function (event) {
-                if (
-                    event.key === "Escape" &&
-                    mobileMenu.classList.contains("opacity-100")
-                ) {
-                    closeMenu();
-                }
+            document.querySelectorAll<HTMLAnchorElement>(".nav-link").forEach((link) => {
+                link.addEventListener("click", (e) => {
+                    const href = link.getAttribute("href") ?? "";
+                    // Ancla dentro de la home: scroll suave sin navegar
+                    if (isHome && href.startsWith("#")) {
+                        e.preventDefault();
+                        const target = document.getElementById(href.slice(1));
+                        if (target) {
+                            closeMenu();
+                            target.scrollIntoView({ behavior: "smooth", block: "start" });
+                            history.pushState(null, "", href);
+                        }
+                    }
+                });
             });
         });
     </script>

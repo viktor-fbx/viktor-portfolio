@@ -1,18 +1,45 @@
 ---
-interface Props {
-    title: string;
-}
-
-const { title } = Astro.props;
+import { ClientRouter } from "astro:transitions";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { translations } from "../i18n/translations";
+import { languages, getLangFromUrl, switchLangPath } from "../i18n/utils";
 import "../styles/global.css";
 import "@fontsource-variable/onest";
 
-const url = new URL(Astro.request.url);
-const langParam = url.searchParams.get("lang");
-const lang = (langParam as keyof typeof translations) || "es";
+interface Props {
+    title: string;
+    description?: string;
+}
+
+const lang = getLangFromUrl(Astro.url);
+const t = translations[lang];
+const { title, description = t.meta.description } = Astro.props;
+
+const origin = Astro.site!;
+const absolute = (path: string) => new URL(path, origin).href;
+const canonical = absolute(switchLangPath(Astro.url, lang));
+const alternates = languages.map((l) => ({
+    lang: l,
+    href: absolute(switchLangPath(Astro.url, l)),
+}));
+const ogLocale = { es: "es_MX", en: "en_US", fr: "fr_FR" } as const;
+const ogImage = absolute("/media/img/VictorHugoAmador.jpg");
+
+const schema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Victor Hugo Amador",
+    jobTitle: t.hero.subtitle,
+    url: canonical,
+    image: ogImage,
+    inLanguage: lang,
+    sameAs: [
+        "https://www.linkedin.com/in/victor-hugo-amador-enriquez-527695318/",
+        "https://github.com/vSk8erB0i",
+        "https://www.instagram.com/viktor.fbx/",
+    ],
+};
 ---
 
 <!doctype html>
@@ -43,6 +70,33 @@ const lang = (langParam as keyof typeof translations) || "es";
 
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
+        <meta name="description" content={description} />
+
+        <!-- SEO multidioma -->
+        <link rel="canonical" href={canonical} />
+        {alternates.map((a) => (
+            <link rel="alternate" hreflang={a.lang} href={a.href} />
+        ))}
+        <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
+
+        <!-- Open Graph / Twitter -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:locale" content={ogLocale[lang]} />
+        {languages
+            .filter((l) => l !== lang)
+            .map((l) => (
+                <meta property="og:locale:alternate" content={ogLocale[l]} />
+            ))}
+        <meta name="twitter:card" content="summary" />
+
+        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+        <!-- Navegación entre idiomas/páginas sin recarga completa -->
+        <ClientRouter />
     </head>
     <body>
         <div class="inset-0 -z-10 overflow-hidden">

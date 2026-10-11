@@ -1,26 +1,43 @@
 ---
 import { translations } from "../i18n/translations";
+import { getLangFromUrl, switchLangPath } from "../i18n/utils";
 
-const currentUrl = new URL(Astro.request.url);
-const currentLang =
-    (currentUrl.searchParams.get("lang") as keyof typeof translations) || "es";
-const currentPath = currentUrl.pathname; // Obtener la ruta actual
+const lang = getLangFromUrl(Astro.url);
+const options = [
+    { code: "es", label: "🇲🇽 ES" },
+    { code: "en", label: "🇺🇸 EN" },
+    { code: "fr", label: "🇫🇷 FR" },
+] as const;
 ---
 
 <div class="language-selector">
-    <form method="GET" action={currentPath}>
-        <!-- Usar la ruta actual -->
-        <select
-            name="lang"
-            class="language-dropdown"
-            onchange="this.form.submit()"
-        >
-            <option value="es" selected={currentLang === "es"}>🇲🇽 ES</option>
-            <option value="en" selected={currentLang === "en"}>🇺🇸 EN</option>
-            <option value="fr" selected={currentLang === "fr"}>🇫🇷 FR</option>
-        </select>
-    </form>
+    <select
+        data-lang-select
+        class="language-dropdown"
+        aria-label={translations[lang].a11y.language}
+    >
+        {options.map((o) => (
+            <option
+                value={switchLangPath(Astro.url, o.code)}
+                selected={o.code === lang}
+            >
+                {o.label}
+            </option>
+        ))}
+    </select>
 </div>
+
+<script>
+    import { navigate } from "astro:transitions/client";
+
+    // Un solo listener global: sigue funcionando aunque la página se reemplace
+    document.addEventListener("change", (e) => {
+        const el = e.target as HTMLElement;
+        if (el instanceof HTMLSelectElement && el.hasAttribute("data-lang-select")) {
+            navigate(el.value);
+        }
+    });
+</script>
 
 <style>
     .language-selector {

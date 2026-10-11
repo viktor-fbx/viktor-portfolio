@@ -1,0 +1,271 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Badge from "../../components/Badge.astro";
+import SocialPill from "../../components/SocialPill.astro";
+import LinkedInIcon from "../../components/icons/LinkedInIcon.astro";
+import GitHubIcon from "../../components/icons/GitHubIcon.astro";
+import FacebookIcon from "../../components/icons/FacebookIcon.astro";
+import InstagramIcon from "../../components/icons/InstagramIcon.astro";
+import EmailIcon from "../../components/icons/EmailIcon.astro";
+import SectionContainerMain from "../../components/SectionContainerMain.astro";
+import GlassCardProject from "../../components/GlassCardProject.astro";
+import { translations } from "../../i18n/translations";
+import { languages, localePath } from "../../i18n/utils";
+
+// Genera /es/, /en/ y /fr/ en el build
+export function getStaticPaths() {
+    return languages.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: keyof typeof translations };
+const t = translations[lang];
+---
+
+<Layout title={t.meta.homeTitle} description={t.meta.description}>
+    <main>
+        <!-- Sección About/Hero -->
+        <SectionContainerMain id="about">
+            <div
+                class="flex flex-col sm:flex-row gap-x-4 gap-y-4 items-center mt-10 sm:mt-20"
+            >
+                <img
+                    class="rounded-full size-20 sm:size-13 mb-4 sm:mb-0"
+                    src="/media/img/VictorHugoAmador.jpg"
+                    alt={t.meta.imageAlt}
+                />
+                <div class="text-center sm:text-left">
+                    <h1
+                        class="text-blue-900 opacity-70 text-2xl sm:text-4xl lg:text-5xl font-bold flex flex-col sm:flex-row gap-x-4 gap-y-2 pb-4 items-center"
+                    >
+                        {t.hero.title}
+                        <a
+                            href="https://www.linkedin.com/in/victor-hugo-amador-enriquez-527695318/"
+                            target="_blank"
+                            rel="noopener"
+                            class="flex justify-center items-center"
+                        >
+                            <Badge>{t.hero.available}</Badge>
+                        </a>
+                    </h1>
+                </div>
+            </div>
+
+            <h2 class="text-xl opacity-70 text-center sm:text-left mt-4">
+                {t.hero.subtitle}
+            </h2>
+
+            <p class="text-lg opacity-70 mt-4 text-center sm:text-left">
+                {t.hero.description}
+            </p>
+
+            <!-- Redes Sociales Responsive -->
+            <nav
+                class="flex flex-wrap gap-2 mt-5 justify-center sm:justify-start"
+            >
+                <SocialPill
+                    href="https://www.linkedin.com/in/victor-hugo-amador-enriquez-527695318/"
+                >
+                    <LinkedInIcon class="size-5 sm:size-6" />
+                    <span class="hidden sm:inline">LinkedIn</span>
+                    <span class="sm:hidden">In</span>
+                </SocialPill>
+                <SocialPill href="https://github.com/vSk8erB0i">
+                    <GitHubIcon class="size-5 sm:size-6" />
+                    <span class="hidden sm:inline">GitHub</span>
+                    <span class="sm:hidden">Git</span>
+                </SocialPill>
+                <SocialPill href="https://www.facebook.com/viktor.fbx/">
+                    <FacebookIcon class="size-5 sm:size-6" />
+                    <span class="hidden sm:inline">Facebook</span>
+                    <span class="sm:hidden">FB</span>
+                </SocialPill>
+                <SocialPill href="https://www.instagram.com/viktor.fbx/">
+                    <InstagramIcon class="size-5 sm:size-6" />
+                    <span class="hidden sm:inline">Instagram</span>
+                    <span class="sm:hidden">IG</span>
+                </SocialPill>
+                <SocialPill href="mailto:vhamadore@gmail.com">
+                    <EmailIcon class="size-5 sm:size-6" />
+                    <span class="hidden sm:inline">vhamadore@gmail.com</span>
+                    <span class="sm:hidden">Email</span>
+                </SocialPill>
+            </nav>
+        </SectionContainerMain>
+
+        <!-- Sección Skills -->
+        <SectionContainerMain id="skills">
+            <h1
+                class="text-blue-900 opacity-70 text-3xl sm:text-4xl lg:text-5xl font-bold text-center mt-10 sm:mt-20 mb-8 sm:mb-12"
+            >
+                {t.skills.title}
+            </h1>
+
+            <!-- Cambia este div contenedor -->
+            <div
+                class="w-full px-4 sm:px-0 mt-8 sm:mt-16 grid grid-cols-1 gap-4 sm:gap-6 lg:gap-8"
+            >
+                <!-- Programación -->
+                <div
+                    class="bg-white/10 backdrop-blur-md border-white border-1 inset-shadow-sm shadow-md rounded-2xl p-4 sm:p-6 hover:scale-[1.02] transition-all duration-500 hover:bg-white/20 hover:shadow-sm hover:inset-shadow-md mx-auto w-full max-w-2xl"
+                >
+                    <h3
+                        class="text-black/70 font-medium text-base sm:text-lg md:text-xl mb-4 sm:mb-6 text-center"
+                    >
+                        {t.skills.categories.programming}
+                    </h3>
+                    <div class="flex flex-wrap gap-2 sm:gap-3 justify-center">
+                        {
+                            t.skills.items.programming.map((skill: string) => (
+                                <span class="rounded-full text-black/70 border border-white bg-white/10 backdrop-blur-md flex justify-center items-center gap-x-2 py-1 px-3 sm:py-2 sm:px-4 shadow-md inset-shadow-sm transition-all duration-300 hover:scale-110 hover:shadow-sm hover:bg-white/20 hover:inset-shadow-md cursor-default text-xs sm:text-sm font-medium">
+                                    {skill}
+                                </span>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <!-- Frameworks -->
+                <div
+                    class="bg-white/10 backdrop-blur-md border-white border-1 inset-shadow-sm shadow-md rounded-2xl p-4 sm:p-6 hover:scale-[1.02] transition-all duration-500 hover:bg-white/20 hover:shadow-sm hover:inset-shadow-md mx-auto w-full max-w-2xl"
+                >
+                    <h3
+                        class="text-black/70 font-medium text-base sm:text-lg md:text-xl mb-4 sm:mb-6 text-center"
+                    >
+                        {t.skills.categories.frameworks}
+                    </h3>
+                    <div class="flex flex-wrap gap-2 sm:gap-3 justify-center">
+                        {
+                            t.skills.items.frameworks.map((skill: string) => (
+                                <span class="rounded-full text-black/70 border border-white bg-white/10 backdrop-blur-md flex justify-center items-center gap-x-2 py-1 px-3 sm:py-2 sm:px-4 shadow-md inset-shadow-sm transition-all duration-300 hover:scale-110 hover:shadow-sm hover:bg-white/20 hover:inset-shadow-md cursor-default text-xs sm:text-sm font-medium">
+                                    {skill}
+                                </span>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <!-- Tools -->
+                <div
+                    class="bg-white/10 backdrop-blur-md border-white border-1 inset-shadow-sm shadow-md rounded-2xl p-4 sm:p-6 hover:scale-[1.02] transition-all duration-500 hover:bg-white/20 hover:shadow-sm hover:inset-shadow-md mx-auto w-full max-w-2xl"
+                >
+                    <h3
+                        class="text-black/70 font-medium text-base sm:text-lg md:text-xl mb-4 sm:mb-6 text-center"
+                    >
+                        {t.skills.categories.tools}
+                    </h3>
+                    <div class="flex flex-wrap gap-2 sm:gap-3 justify-center">
+                        {
+                            t.skills.items.tools.map((skill: string) => (
+                                <span class="rounded-full text-black/70 border border-white bg-white/10 backdrop-blur-md flex justify-center items-center gap-x-2 py-1 px-3 sm:py-2 sm:px-4 shadow-md inset-shadow-sm transition-all duration-300 hover:scale-110 hover:shadow-sm hover:bg-white/20 hover:inset-shadow-md cursor-default text-xs sm:text-sm font-medium">
+                                    {skill}
+                                </span>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <!-- Idiomas -->
+                <div
+                    class="bg-white/10 backdrop-blur-md border-white border-1 inset-shadow-sm shadow-md rounded-2xl p-4 sm:p-6 hover:scale-[1.02] transition-all duration-500 hover:bg-white/20 hover:shadow-sm hover:inset-shadow-md mx-auto w-full max-w-2xl"
+                >
+                    <h3
+                        class="text-black/70 font-medium text-base sm:text-lg md:text-xl mb-4 sm:mb-6 text-center"
+                    >
+                        {t.skills.categories.languages}
+                    </h3>
+                    <div class="flex flex-wrap gap-2 sm:gap-3 justify-center">
+                        {
+                            t.skills.items.languages.map((skill: string) => (
+                                <span class="rounded-full text-black/70 border border-white bg-white/10 backdrop-blur-md flex justify-center items-center gap-x-2 py-1 px-3 sm:py-2 sm:px-4 shadow-md inset-shadow-sm transition-all duration-300 hover:scale-110 hover:shadow-sm hover:bg-white/20 hover:inset-shadow-md cursor-default text-xs sm:text-sm font-medium">
+                                    {skill}
+                                </span>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+        </SectionContainerMain>
+
+        <!-- Sección Projects -->
+        <SectionContainerMain id="projects">
+            <h1
+                class="text-blue-900 opacity-70 text-3xl sm:text-4xl lg:text-5xl font-bold text-center mt-10 sm:mt-20 mb-8 sm:mb-12"
+            >
+                {t.projects.title}
+            </h1>
+
+            <div
+                class="w-full px-4 sm:px-0 mt-8 sm:mt-16 grid grid-cols-1 gap-4 lg:grid-cols-2"
+            >
+                <!-- Proyecto 1 - Modelado 3D -->
+                <GlassCardProject
+                    title={t.projectItems.modeling3d.title}
+                    description={t.projectItems.modeling3d.description}
+                    imageUrl="/media/img/projects/3D-gallery.png"
+                    tags={["Blender", "3D Art"]}
+                    imageGradient="from-blue-200 to-purple-300"
+                    imagePosition="left"
+                    imageRotation="slight-right"
+                    imageScale="small"
+                    cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
+                    projectUrl={localePath(lang, "/projects/3D-gallery/")}
+                />
+
+                <!-- Proyecto 2 - Portafolio Web -->
+                <GlassCardProject
+                    title={t.projectItems.webPortfolio.title}
+                    description={t.projectItems.webPortfolio.description}
+                    imageUrl="/media/img/projects/portfolio.png"
+                    tags={["Astro", "Tailwind", "TypeScript"]}
+                    imageGradient="from-blue-200 to-purple-300"
+                    imagePosition="center"
+                    imageRotation="moderate"
+                    imageScale="small"
+                    cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
+                    />
+
+                    <!-- PROYECTO 3 - folklore -->
+                    <GlassCardProject
+                        title={t.projectItems.folklore.title}
+                        description={t.projectItems.folklore.description}
+                        imageUrl="/media/img/projects/folklore.png"
+                        tags={["HTML", "CSS", "JavaScript", "Illustration"]}
+                        imageGradient="from-blue-200 to-purple-300"
+                        imagePosition="left"
+                        imageRotation="none"
+                        imageScale="medium"
+                        cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
+                        projectUrl="https://folklore-viktor.netlify.app/"
+                    />
+
+                    <!-- Proyecto 4 - Grupo Inndex -->
+                    <GlassCardProject
+                        title={t.projectItems.inndex.title}
+                        description={t.projectItems.inndex.description}
+                        imageUrl="/media/img/projects/grupoinndex.png"
+                        tags={["Wordpress", "Elementor", "Web design"]}
+                        imageGradient="from-blue-200 to-purple-300"
+                        imagePosition="right"
+                        imageRotation="slight-left"
+                        imageScale="medium"
+                        cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
+                        projectUrl="https://grupoinndex.netlify.app/"
+                    />
+
+                    <!-- PROYECTO 5 - Ludix -->
+                    <GlassCardProject
+                        title={t.projectItems.ludix.title}
+                        description={t.projectItems.ludix.description}
+                        imageUrl="/media/img/projects/ludix.png"
+                        tags={["Unity", "C#", "Game design"]}
+                        imageGradient="from-blue-200 to-purple-300"
+                        imagePosition="right"
+                        imageRotation="moderate"
+                        imageScale="small"
+                        cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
+                        projectUrl="https://www.youtube.com/watch?v=mbEin7RmL_Y&feature=youtu.be"
+                    />
+            </div>
+        </SectionContainerMain>
+    </main>
+</Layout>

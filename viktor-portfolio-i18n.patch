@@ -1,0 +1,1505 @@
+diff --git a/astro.config.mjs b/astro.config.mjs
+index f8160f5..76f0f5d 100644
+--- a/astro.config.mjs
++++ b/astro.config.mjs
+@@ -1,6 +1,7 @@
+ // @ts-check
+ import { defineConfig } from 'astro/config';
+ import tailwindcss from '@tailwindcss/vite';
++import sitemap from '@astrojs/sitemap';
+ 
+ // Determinar si estamos en Netlify
+ const isNetlify = process.env.NETLIFY === 'true' || process.env.CONTEXT === 'production';
+@@ -12,6 +13,13 @@ export default defineConfig({
+   base: isNetlify 
+     ? '/'  // En Netlify no necesitas base path
+     : '/viktor-portfolio',
++  integrations: [
++    sitemap({
++      // La raíz "/" solo redirige: no va al sitemap
++      filter: (page) => !/^https?:\/\/[^/]+(\/viktor-portfolio)?\/?$/.test(page),
++      i18n: { defaultLocale: 'es', locales: { es: 'es', en: 'en', fr: 'fr' } },
++    }),
++  ],
+   vite: {
+     plugins: [tailwindcss()],
+   },
+diff --git a/package-lock.json b/package-lock.json
+index a8963ba..9b6d1ae 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -8,6 +8,7 @@
+       "name": "viktor-portfolio",
+       "version": "0.0.1",
+       "dependencies": {
++        "@astrojs/sitemap": "^3.7.4",
+         "@fontsource-variable/onest": "^5.2.9",
+         "@tailwindcss/vite": "^4.1.16",
+         "astro": "^5.12.0",
+@@ -72,6 +73,25 @@
+         "node": "18.20.8 || ^20.3.0 || >=22.0.0"
+       }
+     },
++    "node_modules/@astrojs/sitemap": {
++      "version": "3.7.4",
++      "resolved": "https://registry.npmjs.org/@astrojs/sitemap/-/sitemap-3.7.4.tgz",
++      "integrity": "sha512-LbKNC24bdUWcQf/pThB6qLlSqHojxGjZDURIzFocY8rlWnAn2t74nnhnK6S5x0NHriHoAduLEpVjRykmeGiVvA==",
++      "license": "MIT",
++      "dependencies": {
++        "sitemap": "^9.0.0",
++        "zod": "^4.3.6"
++      }
++    },
++    "node_modules/@astrojs/sitemap/node_modules/zod": {
++      "version": "4.6.5",
++      "resolved": "https://registry.npmjs.org/zod/-/zod-4.6.5.tgz",
++      "integrity": "sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==",
++      "license": "MIT",
++      "funding": {
++        "url": "https://github.com/sponsors/colinhacks"
++      }
++    },
+     "node_modules/@astrojs/telemetry": {
+       "version": "3.3.0",
+       "resolved": "https://registry.npmjs.org/@astrojs/telemetry/-/telemetry-3.3.0.tgz",
+@@ -1781,12 +1801,21 @@
+       }
+     },
+     "node_modules/@types/node": {
+-      "version": "24.9.1",
+-      "resolved": "https://registry.npmjs.org/@types/node/-/node-24.9.1.tgz",
+-      "integrity": "sha512-QoiaXANRkSXK6p0Duvt56W208du4P9Uye9hWLWgGMDTEoKPhuenzNcC4vGUmrNkiOKTlIrBoyNQYNpSwfEZXSg==",
++      "version": "24.19.2",
++      "resolved": "https://registry.npmjs.org/@types/node/-/node-24.19.2.tgz",
++      "integrity": "sha512-93d49wCWJkCyN87MxLpNN6KXPCwFw7bVUg79mGUV1OS40JGWwVCr8n61DXCSqz7CV6/VfPkb7xec7uP2M+QHWQ==",
+       "license": "MIT",
+       "dependencies": {
+-        "undici-types": "~7.16.0"
++        "undici-types": ">=7.24.0 <7.24.7"
++      }
++    },
++    "node_modules/@types/sax": {
++      "version": "1.2.7",
++      "resolved": "https://registry.npmjs.org/@types/sax/-/sax-1.2.7.tgz",
++      "integrity": "sha512-rO73L89PJxeYM3s3pPPjiPgVVcymqU490g0YO5n5By0k2Erzj6tay/4lr1CHAAU4JyOWd1rpQ8bCf6cZfHU96A==",
++      "license": "MIT",
++      "dependencies": {
++        "@types/node": "*"
+       }
+     },
+     "node_modules/@types/stats.js": {
+@@ -1949,6 +1978,12 @@
+         "url": "https://github.com/sponsors/jonschlinkert"
+       }
+     },
++    "node_modules/arg": {
++      "version": "5.0.2",
++      "resolved": "https://registry.npmjs.org/arg/-/arg-5.0.2.tgz",
++      "integrity": "sha512-PYjyFOLKQ9y57JvQ6QLo8dAgNqswh8M1RMJYdQduT6xbWSgK36P/Z/v+p888pM69jMMfS8Xd8F6I1kQ/I9HUGg==",
++      "license": "MIT"
++    },
+     "node_modules/argparse": {
+       "version": "2.0.1",
+       "resolved": "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz",
+@@ -4759,6 +4794,15 @@
+         "fsevents": "~2.3.2"
+       }
+     },
++    "node_modules/sax": {
++      "version": "1.6.1",
++      "resolved": "https://registry.npmjs.org/sax/-/sax-1.6.1.tgz",
++      "integrity": "sha512-42tBVwLWnaQvW5zc4HbZrTuWccECCZfBi92FDuwtqxasH+JbPB3/FOKb1m222K42R4WxuxzzMsTswfzgtSu64Q==",
++      "license": "BlueOak-1.0.0",
++      "engines": {
++        "node": ">=11.0.0"
++      }
++    },
+     "node_modules/semver": {
+       "version": "7.7.3",
+       "resolved": "https://registry.npmjs.org/semver/-/semver-7.7.3.tgz",
+@@ -4836,6 +4880,25 @@
+       "integrity": "sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==",
+       "license": "MIT"
+     },
++    "node_modules/sitemap": {
++      "version": "9.0.1",
++      "resolved": "https://registry.npmjs.org/sitemap/-/sitemap-9.0.1.tgz",
++      "integrity": "sha512-S6hzjGJSG3d6if0YoF5kTyeRJvia6FSTBroE5fQ0bu1QNxyJqhhinfUsXi9fH3MgtXODWvwo2BDyQSnhPQ88uQ==",
++      "license": "MIT",
++      "dependencies": {
++        "@types/node": "^24.9.2",
++        "@types/sax": "^1.2.1",
++        "arg": "^5.0.0",
++        "sax": "^1.4.1"
++      },
++      "bin": {
++        "sitemap": "dist/esm/cli.js"
++      },
++      "engines": {
++        "node": ">=20.19.5",
++        "npm": ">=10.8.2"
++      }
++    },
+     "node_modules/smol-toml": {
+       "version": "1.4.2",
+       "resolved": "https://registry.npmjs.org/smol-toml/-/smol-toml-1.4.2.tgz",
+@@ -5057,9 +5120,9 @@
+       "license": "MIT"
+     },
+     "node_modules/undici-types": {
+-      "version": "7.16.0",
+-      "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-7.16.0.tgz",
+-      "integrity": "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==",
++      "version": "7.24.6",
++      "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-7.24.6.tgz",
++      "integrity": "sha512-WRNW+sJgj5OBN4/0JpHFqtqzhpbnV0GuB+OozA9gCL7a993SmU+1JBZCzLNxYsbMfIeDL+lTsphD5jN5N+n0zg==",
+       "license": "MIT"
+     },
+     "node_modules/unicode-properties": {
+diff --git a/package.json b/package.json
+index 020e7a6..c2a51d8 100644
+--- a/package.json
++++ b/package.json
+@@ -9,6 +9,7 @@
+     "astro": "astro"
+   },
+   "dependencies": {
++    "@astrojs/sitemap": "^3.7.4",
+     "@fontsource-variable/onest": "^5.2.9",
+     "@tailwindcss/vite": "^4.1.16",
+     "astro": "^5.12.0",
+diff --git a/public/robots.txt b/public/robots.txt
+new file mode 100644
+index 0000000..445c312
+--- /dev/null
++++ b/public/robots.txt
+@@ -0,0 +1,4 @@
++User-agent: *
++Allow: /
++
++Sitemap: https://viktor-fbx.netlify.app/sitemap-index.xml
+diff --git a/src/components/Footer.astro b/src/components/Footer.astro
+index f0d1770..029a9a7 100644
+--- a/src/components/Footer.astro
++++ b/src/components/Footer.astro
+@@ -1,9 +1,8 @@
+ ---
+ import { translations } from "../i18n/translations";
++import { getLangFromUrl } from "../i18n/utils";
+ 
+-const url = new URL(Astro.request.url);
+-const langParam = url.searchParams.get('lang');
+-const lang = langParam as keyof typeof translations || 'es';
++const lang = getLangFromUrl(Astro.url);
+ const t = translations[lang];
+ ---
+ 
+@@ -22,7 +21,7 @@ const t = translations[lang];
+             <div class="flex items-center gap-3 text-blue-900/60 text-xs sm:text-sm font-light">
+                 <span class="text-lg animate-pulse">✨</span>
+                 <span class="bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20">
+-                    {lang === 'es' ? 'Creado con' : lang === 'en' ? 'Built with' : 'Construit avec'} <span class="font-semibold text-blue-600">Astro</span>
++                    {t.footer.builtWith} <span class="font-semibold text-blue-600">Astro</span>
+                 </span>
+                 <span class="text-lg animate-pulse">✨</span>
+             </div>
+diff --git a/src/components/Header.astro b/src/components/Header.astro
+index d2dce3d..e33db68 100644
+--- a/src/components/Header.astro
++++ b/src/components/Header.astro
+@@ -1,23 +1,27 @@
+ ---
+ import LanguageSwitcher from "./LanguageSwitcher.astro";
+ import { translations } from "../i18n/translations";
++import { getLangFromUrl, localePath } from "../i18n/utils";
+ 
+-const url = new URL(Astro.request.url);
+-const langParam = url.searchParams.get("lang");
+-const lang = (langParam as keyof typeof translations) || "es";
++const lang = getLangFromUrl(Astro.url);
+ const t = translations[lang];
+ 
+-// Determinar si estamos en la página principal
+-const isHomePage = Astro.url.pathname === "/";
++const homePath = localePath(lang);
++const normalize = (p: string) => p.replace(/\/$/, "");
++// Página principal = /es, /en o /fr (con o sin barra final)
++const isHomePage = normalize(Astro.url.pathname) === normalize(homePath);
++const galleryPath = localePath(lang, "/projects/3D-gallery/");
++const anchor = (id: string) => (isHomePage ? `#${id}` : `${homePath}#${id}`);
+ ---
+ 
+ <header
++    data-home={isHomePage ? "true" : "false"}
+     class="sticky top-4 flex justify-between items-center mx-4 sm:mx-auto w-full sm:w-[95%] lg:w-[1120px] rounded-full px-4 sm:px-6 py-2 my-4 bg-white/10 backdrop-blur-md border-white border-1 inset-shadow-sm shadow-md z-50"
+ >
+-    <a href={`/?lang=${lang}`} class="flex-shrink-0">
++    <a href={homePath} class="flex-shrink-0">
+         <img
+             src="/media/img/Viktor-logo-liquid-metal.png"
+-            alt="Viktor liquid metal logo"
++            alt={t.a11y.logoAlt}
+             width={85}
+             height={85}
+             class="w-[50px] sm:w-[70px] lg:w-[85px] h-auto"
+@@ -29,41 +33,39 @@ const isHomePage = Astro.url.pathname === "/";
+         class="hidden md:flex flex-row gap-x-6 lg:gap-x-8 justify-center opacity-70 text-base lg:text-md"
+     >
+         <a
+-            href={isHomePage ? "#about" : `/?lang=${lang}#about`}
++            href={anchor("about")}
+             class="hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-1 nav-link"
+         >
+             {t.nav.about}
+         </a>
+         <a
+-            href={isHomePage ? "#skills" : `/?lang=${lang}#skills`}
++            href={anchor("skills")}
+             class="hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-1 nav-link"
+         >
+             {t.nav.skills}
+         </a>
+         <a
+-            href={isHomePage ? "#projects" : `/?lang=${lang}#projects`}
++            href={anchor("projects")}
+             class="hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-1 nav-link"
+         >
+             {t.nav.projects}
+         </a>
+         <a
+-            href="/projects/3D-gallery/"
++            href={galleryPath}
+             class="hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-1 nav-link"
+         >
+-            {t.gallery.title || "3D Gallery"}
++            {t.gallery.title}
+         </a>
+     </nav>
+ 
+     <div class="flex items-center gap-x-3 sm:gap-x-4">
+-        <!-- <div class="hidden sm:block">
+-            <LanguageSwitcher />
+-        </div> -->
++        <LanguageSwitcher />
+ 
+         <button
+             class="md:hidden flex flex-col justify-center items-center w-8 h-8 relative group"
+             id="menu-toggle"
+             type="button"
+-            aria-label="Abrir menú"
++            aria-label={t.a11y.openMenu}
+         >
+             <span
+                 class="w-6 h-0.5 bg-blue-900/70 mb-1.5 transition-all duration-300 group-[.active]:rotate-45 group-[.active]:mb-0 group-[.active]:translate-y-1"
+@@ -84,138 +86,112 @@ const isHomePage = Astro.url.pathname === "/";
+     >
+         <nav class="flex flex-col gap-2">
+             <a
+-                href={isHomePage ? "#about" : `/?lang=${lang}#about`}
++                href={anchor("about")}
+                 class="text-blue-900/70 font-medium hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-3 px-4 rounded-lg hover:bg-white/20 text-center nav-link"
+                 data-menu-close
+             >
+                 {t.nav.about}
+             </a>
+             <a
+-                href={isHomePage ? "#skills" : `/?lang=${lang}#skills`}
++                href={anchor("skills")}
+                 class="text-blue-900/70 font-medium hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-3 px-4 rounded-lg hover:bg-white/20 text-center nav-link"
+                 data-menu-close
+             >
+                 {t.nav.skills}
+             </a>
+             <a
+-                href={isHomePage ? "#projects" : `/?lang=${lang}#projects`}
++                href={anchor("projects")}
+                 class="text-blue-900/70 font-medium hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-3 px-4 rounded-lg hover:bg-white/20 text-center nav-link"
+                 data-menu-close
+             >
+                 {t.nav.projects}
+             </a>
+             <a
+-                href="/projects/3D-gallery/"
++                href={galleryPath}
+                 class="text-blue-900/70 font-medium hover:text-blue-300 transition-colors duration-200 whitespace-nowrap py-3 px-4 rounded-lg hover:bg-white/20 text-center nav-link"
+                 data-menu-close
+             >
+-                {t.gallery.title || "3D Gallery"}
++                {t.gallery.title}
+             </a>
+ 
+-            <!-- <div class="bg-white/50 pt-3 border-t border-white/20 mt-2">
+-                <div class="flex justify-center">
+-                    <LanguageSwitcher />
+-                </div>
+-            </div> -->
+         </nav>
+     </div>
+ 
+-    <script is:inline>
+-        document.addEventListener("DOMContentLoaded", function () {
+-            var menuToggle = document.getElementById("menu-toggle");
+-            var mobileMenu = document.getElementById("mobile-menu");
+-            var menuCloseItems = document.querySelectorAll("[data-menu-close]");
+-            var navLinks = document.querySelectorAll(".nav-link");
++    <script>
++        // Módulo: se ejecuta una sola vez. Los listeners por página se
++        // enganchan en "astro:page-load" (carga inicial y cada navegación).
++        function closeMenu() {
++            const menuToggle = document.getElementById("menu-toggle");
++            const mobileMenu = document.getElementById("mobile-menu");
++            if (!menuToggle || !mobileMenu) return;
++            menuToggle.classList.remove("active");
++            mobileMenu.classList.add("opacity-0", "invisible", "translate-y-2");
++            mobileMenu.classList.remove("opacity-100", "visible", "translate-y-0");
++        }
+ 
++        function toggleMenu() {
++            const menuToggle = document.getElementById("menu-toggle");
++            const mobileMenu = document.getElementById("mobile-menu");
+             if (!menuToggle || !mobileMenu) return;
++            menuToggle.classList.toggle("active");
++            mobileMenu.classList.toggle("opacity-0");
++            mobileMenu.classList.toggle("invisible");
++            mobileMenu.classList.toggle("translate-y-2");
++            mobileMenu.classList.toggle("opacity-100");
++            mobileMenu.classList.toggle("visible");
++            mobileMenu.classList.toggle("translate-y-0");
++        }
+ 
+-            function toggleMenu() {
+-                menuToggle.classList.toggle("active");
+-                mobileMenu.classList.toggle("opacity-0");
+-                mobileMenu.classList.toggle("invisible");
+-                mobileMenu.classList.toggle("translate-y-2");
+-                mobileMenu.classList.toggle("opacity-100");
+-                mobileMenu.classList.toggle("visible");
+-                mobileMenu.classList.toggle("translate-y-0");
+-            }
++        // Listeners de documento: se registran una vez y buscan el DOM actual
++        document.addEventListener("click", (event) => {
++            const target = event.target as Node;
++            const menuToggle = document.getElementById("menu-toggle");
++            const mobileMenu = document.getElementById("mobile-menu");
++            if (!menuToggle || !mobileMenu) return;
+ 
+-            function closeMenu() {
+-                menuToggle.classList.remove("active");
+-                mobileMenu.classList.add(
+-                    "opacity-0",
+-                    "invisible",
+-                    "translate-y-2",
+-                );
+-                mobileMenu.classList.remove(
+-                    "opacity-100",
+-                    "visible",
+-                    "translate-y-0",
+-                );
++            if (menuToggle.contains(target)) {
++                event.stopPropagation();
++                toggleMenu();
++                return;
++            }
++            if (
++                mobileMenu.classList.contains("opacity-100") &&
++                !mobileMenu.contains(target)
++            ) {
++                closeMenu();
+             }
++        });
+ 
+-            navLinks.forEach(function (link) {
+-                link.addEventListener("click", function (e) {
+-                    var href = this.getAttribute("href");
++        document.addEventListener("keydown", (event) => {
++            const mobileMenu = document.getElementById("mobile-menu");
++            if (event.key === "Escape" && mobileMenu?.classList.contains("opacity-100")) {
++                closeMenu();
++            }
++        });
+ 
+-                    // Si es un anchor link y estamos en la página principal
+-                    if (
+-                        href.includes("#") &&
+-                        window.location.pathname === "/"
+-                    ) {
+-                        e.preventDefault();
++        document.addEventListener("astro:page-load", () => {
++            const header = document.querySelector("header[data-home]");
++            const isHome = header?.getAttribute("data-home") === "true";
+ 
+-                        var targetId = href.split("#")[1];
+-                        var targetElement = document.getElementById(targetId);
++            document.querySelectorAll("[data-menu-close]").forEach((item) =>
++                item.addEventListener("click", closeMenu),
++            );
+ 
+-                        if (targetElement) {
++            document.querySelectorAll<HTMLAnchorElement>(".nav-link").forEach((link) => {
++                link.addEventListener("click", (e) => {
++                    const href = link.getAttribute("href") ?? "";
++                    // Ancla dentro de la home: scroll suave sin navegar
++                    if (isHome && href.startsWith("#")) {
++                        e.preventDefault();
++                        const target = document.getElementById(href.slice(1));
++                        if (target) {
+                             closeMenu();
+-
+-                            targetElement.scrollIntoView({
+-                                behavior: "smooth",
+-                                block: "start",
+-                            });
+-
+-                            // Actualizar URL sin recargar
+-                            window.history.pushState(null, "", href);
++                            target.scrollIntoView({ behavior: "smooth", block: "start" });
++                            history.pushState(null, "", href);
+                         }
+                     }
+-                    // Los links que van a otras páginas se manejan normalmente
+                 });
+             });
+-
+-            function getCurrentLang() {
+-                var urlParams = new URLSearchParams(window.location.search);
+-                return urlParams.get("lang") || "es";
+-            }
+-
+-            menuToggle.addEventListener("click", function (event) {
+-                event.stopPropagation();
+-                toggleMenu();
+-            });
+-
+-            menuCloseItems.forEach(function (item) {
+-                item.addEventListener("click", closeMenu);
+-            });
+-
+-            document.addEventListener("click", function (event) {
+-                if (!mobileMenu.classList.contains("opacity-100")) return;
+-
+-                var clickInsideMenu = mobileMenu.contains(event.target);
+-                var clickOnToggle = menuToggle.contains(event.target);
+-
+-                if (!clickInsideMenu && !clickOnToggle) {
+-                    closeMenu();
+-                }
+-            });
+-
+-            document.addEventListener("keydown", function (event) {
+-                if (
+-                    event.key === "Escape" &&
+-                    mobileMenu.classList.contains("opacity-100")
+-                ) {
+-                    closeMenu();
+-                }
+-            });
+         });
+     </script>
+ 
+diff --git a/src/components/LanguageSwitcher.astro b/src/components/LanguageSwitcher.astro
+index 357974e..d2b4cc1 100644
+--- a/src/components/LanguageSwitcher.astro
++++ b/src/components/LanguageSwitcher.astro
+@@ -1,27 +1,44 @@
+ ---
+ import { translations } from "../i18n/translations";
++import { getLangFromUrl, switchLangPath } from "../i18n/utils";
+ 
+-const currentUrl = new URL(Astro.request.url);
+-const currentLang =
+-    (currentUrl.searchParams.get("lang") as keyof typeof translations) || "es";
+-const currentPath = currentUrl.pathname; // Obtener la ruta actual
++const lang = getLangFromUrl(Astro.url);
++const options = [
++    { code: "es", label: "🇲🇽 ES" },
++    { code: "en", label: "🇺🇸 EN" },
++    { code: "fr", label: "🇫🇷 FR" },
++] as const;
+ ---
+ 
+ <div class="language-selector">
+-    <form method="GET" action={currentPath}>
+-        <!-- Usar la ruta actual -->
+-        <select
+-            name="lang"
+-            class="language-dropdown"
+-            onchange="this.form.submit()"
+-        >
+-            <option value="es" selected={currentLang === "es"}>🇲🇽 ES</option>
+-            <option value="en" selected={currentLang === "en"}>🇺🇸 EN</option>
+-            <option value="fr" selected={currentLang === "fr"}>🇫🇷 FR</option>
+-        </select>
+-    </form>
++    <select
++        data-lang-select
++        class="language-dropdown"
++        aria-label={translations[lang].a11y.language}
++    >
++        {options.map((o) => (
++            <option
++                value={switchLangPath(Astro.url, o.code)}
++                selected={o.code === lang}
++            >
++                {o.label}
++            </option>
++        ))}
++    </select>
+ </div>
+ 
++<script>
++    import { navigate } from "astro:transitions/client";
++
++    // Un solo listener global: sigue funcionando aunque la página se reemplace
++    document.addEventListener("change", (e) => {
++        const el = e.target as HTMLElement;
++        if (el instanceof HTMLSelectElement && el.hasAttribute("data-lang-select")) {
++            navigate(el.value);
++        }
++    });
++</script>
++
+ <style>
+     .language-selector {
+         position: relative;
+diff --git a/src/i18n/translations.ts b/src/i18n/translations.ts
+index 943c2ef..8fd7414 100644
+--- a/src/i18n/translations.ts
++++ b/src/i18n/translations.ts
+@@ -1,5 +1,42 @@
+ export const translations = {
+     es: {
++        meta: {
++            homeTitle: "Victor Hugo Amador | Desarrollador Web y Artista 3D",
++            galleryTitle: "Galería 3D | Victor Hugo Amador",
++            description: "Portafolio de Victor Hugo Amador: desarrollo web con Astro, Angular y Vue, y modelado 3D con Blender.",
++            galleryDescription: "Galería interactiva de modelos 3D de Victor Hugo Amador: personajes, productos y escenarios low poly y realistas.",
++            imageAlt: "Victor Hugo Amador, desarrollador web y artista 3D"
++        },
++        footer: {
++            builtWith: "Creado con"
++        },
++        a11y: {
++            openMenu: "Abrir menú",
++            language: "Idioma",
++            logoAlt: "Logotipo de Viktor"
++        },
++        projectItems: {
++            modeling3d: {
++                title: "Modelado 3D",
++                description: "Colección de modelos y escenarios 3D creados y texturizados por mí. Cada pieza fue diseñada para mostrar diferentes estilos: realista, low poly y estilizado."
++            },
++            webPortfolio: {
++                title: "Portafolio Web",
++                description: "Diseño y desarrollo de mi portafolio web personal con una estética limpia y animaciones suaves. Construido con Astro y Tailwind para un rendimiento óptimo."
++            },
++            folklore: {
++                title: "folklore",
++                description: "Página artística inspirada en el álbum folklore de Taylor Swift. Incluye ilustraciones originales y un diseño web que evoca la atmósfera del disco."
++            },
++            inndex: {
++                title: "Grupo Inndex",
++                description: "Rediseño completo del sitio web corporativo de Grupo Inndex. Implementado en WordPress con optimización de estructura, diseño y velocidad de carga."
++            },
++            ludix: {
++                title: "Ludix",
++                description: "Desarrollo de minijuegos educativos para la app Ludix, diseñada en Unity para aprender idiomas de forma interactiva. Incluye mecánicas de gamificación."
++            }
++        },
+         nav: {
+             home: "Inicio",
+             about: "Sobre Mí",
+@@ -95,6 +132,43 @@ export const translations = {
+         }
+     },
+     en: {
++        meta: {
++            homeTitle: "Victor Hugo Amador | Web Developer & 3D Artist",
++            galleryTitle: "3D Gallery | Victor Hugo Amador",
++            description: "Portfolio of Victor Hugo Amador: web development with Astro, Angular and Vue, and 3D modeling with Blender.",
++            galleryDescription: "Interactive gallery of 3D models by Victor Hugo Amador: characters, products and low poly and realistic scenes.",
++            imageAlt: "Victor Hugo Amador, web developer and 3D artist"
++        },
++        footer: {
++            builtWith: "Built with"
++        },
++        a11y: {
++            openMenu: "Open menu",
++            language: "Language",
++            logoAlt: "Viktor logo"
++        },
++        projectItems: {
++            modeling3d: {
++                title: "3D Modeling",
++                description: "Collection of 3D models and environments created and textured by me. Each piece explores different visual styles: realistic, low poly, and stylized."
++            },
++            webPortfolio: {
++                title: "Web Portfolio",
++                description: "Design and development of my personal web portfolio with a clean aesthetic and smooth animations. Built with Astro and Tailwind for optimal performance."
++            },
++            folklore: {
++                title: "folklore",
++                description: "Artistic website inspired by Taylor Swift's album folklore. Features original illustrations and a web design that captures the album's intimate atmosphere."
++            },
++            inndex: {
++                title: "Grupo Inndex",
++                description: "Complete redesign of Grupo Inndex's corporate website. Implemented in WordPress with improved structure, design, and loading performance."
++            },
++            ludix: {
++                title: "Ludix",
++                description: "Development of educational mini-games for Ludix, a Unity-based app designed to make language learning interactive and fun."
++            }
++        },
+         nav: {
+             home: "Home",
+             about: "About",
+@@ -181,6 +255,43 @@ export const translations = {
+         }
+     },
+     fr: {
++        meta: {
++            homeTitle: "Victor Hugo Amador | Développeur Web et Artiste 3D",
++            galleryTitle: "Galerie 3D | Victor Hugo Amador",
++            description: "Portfolio de Victor Hugo Amador : développement web avec Astro, Angular et Vue, et modélisation 3D avec Blender.",
++            galleryDescription: "Galerie interactive de modèles 3D de Victor Hugo Amador : personnages, produits et décors low poly et réalistes.",
++            imageAlt: "Victor Hugo Amador, développeur web et artiste 3D"
++        },
++        footer: {
++            builtWith: "Construit avec"
++        },
++        a11y: {
++            openMenu: "Ouvrir le menu",
++            language: "Langue",
++            logoAlt: "Logo de Viktor"
++        },
++        projectItems: {
++            modeling3d: {
++                title: "Modélisation 3D",
++                description: "Collection de modèles et décors 3D créés et texturés par moi-même. Chaque pièce explore différents styles visuels : réaliste, low poly et stylisé."
++            },
++            webPortfolio: {
++                title: "Portfolio Web",
++                description: "Conception et développement de mon portfolio web personnel, au design épuré et aux animations fluides. Réalisé avec Astro et Tailwind pour des performances optimales."
++            },
++            folklore: {
++                title: "folklore",
++                description: "Site artistique inspiré de l'album folklore de Taylor Swift. Présente des illustrations originales et une conception évoquant l'atmosphère du disque."
++            },
++            inndex: {
++                title: "Grupo Inndex",
++                description: "Refonte complète du site web d'entreprise de Grupo Inndex. Réalisée sous WordPress avec une meilleure structure, conception et rapidité de chargement."
++            },
++            ludix: {
++                title: "Ludix",
++                description: "Développement de mini-jeux éducatifs pour Ludix, une application créée avec Unity pour rendre l'apprentissage des langues interactif et ludique."
++            }
++        },
+         nav: {
+             home: "Accueil",
+             about: "À propos",
+diff --git a/src/i18n/utils.ts b/src/i18n/utils.ts
+new file mode 100644
+index 0000000..faf711d
+--- /dev/null
++++ b/src/i18n/utils.ts
+@@ -0,0 +1,36 @@
++import { translations, type Language } from "./translations";
++
++export const languages = ["es", "en", "fr"] as const;
++export const defaultLang: Language = "es";
++
++// BASE_URL sin barra final ("" en Netlify, "/viktor-portfolio" en GitHub Pages)
++const base = import.meta.env.BASE_URL.replace(/\/$/, "");
++
++export const isLang = (value: string | undefined): value is Language =>
++    !!value && (languages as readonly string[]).includes(value);
++
++/** Quita el base y devuelve la ruta interna: "/en/projects/3D-gallery/" */
++const stripBase = (pathname: string) =>
++    pathname.startsWith(base) ? pathname.slice(base.length) || "/" : pathname;
++
++/** Idioma según el primer segmento de la URL (/es, /en, /fr). */
++export function getLangFromUrl(url: URL): Language {
++    const seg = stripBase(url.pathname).split("/")[1];
++    return isLang(seg) ? seg : defaultLang;
++}
++
++/** Textos del idioma de la URL actual. */
++export const useTranslations = (url: URL) => translations[getLangFromUrl(url)];
++
++/** localePath("en", "/projects/3D-gallery/") -> "/en/projects/3D-gallery/" */
++export function localePath(lang: Language, path = "/") {
++    const clean = path.startsWith("/") ? path : `/${path}`;
++    return `${base}/${lang}${clean}`;
++}
++
++/** Misma página en otro idioma: switchLangPath(Astro.url, "fr") */
++export function switchLangPath(url: URL, lang: Language) {
++    const [, first, ...rest] = stripBase(url.pathname).split("/");
++    const tail = isLang(first) ? `/${rest.join("/")}` : stripBase(url.pathname);
++    return localePath(lang, tail);
++}
+diff --git a/src/layouts/Layout.astro b/src/layouts/Layout.astro
+index 756e3c4..bb05583 100644
+--- a/src/layouts/Layout.astro
++++ b/src/layouts/Layout.astro
+@@ -1,18 +1,45 @@
+ ---
+-interface Props {
+-    title: string;
+-}
+-
+-const { title } = Astro.props;
++import { ClientRouter } from "astro:transitions";
+ import Header from "../components/Header.astro";
+ import Footer from "../components/Footer.astro";
+ import { translations } from "../i18n/translations";
++import { languages, getLangFromUrl, switchLangPath } from "../i18n/utils";
+ import "../styles/global.css";
+ import "@fontsource-variable/onest";
+ 
+-const url = new URL(Astro.request.url);
+-const langParam = url.searchParams.get("lang");
+-const lang = (langParam as keyof typeof translations) || "es";
++interface Props {
++    title: string;
++    description?: string;
++}
++
++const lang = getLangFromUrl(Astro.url);
++const t = translations[lang];
++const { title, description = t.meta.description } = Astro.props;
++
++const origin = Astro.site!;
++const absolute = (path: string) => new URL(path, origin).href;
++const canonical = absolute(switchLangPath(Astro.url, lang));
++const alternates = languages.map((l) => ({
++    lang: l,
++    href: absolute(switchLangPath(Astro.url, l)),
++}));
++const ogLocale = { es: "es_MX", en: "en_US", fr: "fr_FR" } as const;
++const ogImage = absolute("/media/img/VictorHugoAmador.jpg");
++
++const schema = {
++    "@context": "https://schema.org",
++    "@type": "Person",
++    name: "Victor Hugo Amador",
++    jobTitle: t.hero.subtitle,
++    url: canonical,
++    image: ogImage,
++    inLanguage: lang,
++    sameAs: [
++        "https://www.linkedin.com/in/victor-hugo-amador-enriquez-527695318/",
++        "https://github.com/vSk8erB0i",
++        "https://www.instagram.com/viktor.fbx/",
++    ],
++};
+ ---
+ 
+ <!doctype html>
+@@ -43,6 +70,33 @@ const lang = (langParam as keyof typeof translations) || "es";
+ 
+         <meta name="generator" content={Astro.generator} />
+         <title>{title}</title>
++        <meta name="description" content={description} />
++
++        <!-- SEO multidioma -->
++        <link rel="canonical" href={canonical} />
++        {alternates.map((a) => (
++            <link rel="alternate" hreflang={a.lang} href={a.href} />
++        ))}
++        <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
++
++        <!-- Open Graph / Twitter -->
++        <meta property="og:type" content="website" />
++        <meta property="og:title" content={title} />
++        <meta property="og:description" content={description} />
++        <meta property="og:url" content={canonical} />
++        <meta property="og:image" content={ogImage} />
++        <meta property="og:locale" content={ogLocale[lang]} />
++        {languages
++            .filter((l) => l !== lang)
++            .map((l) => (
++                <meta property="og:locale:alternate" content={ogLocale[l]} />
++            ))}
++        <meta name="twitter:card" content="summary" />
++
++        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
++
++        <!-- Navegación entre idiomas/páginas sin recarga completa -->
++        <ClientRouter />
+     </head>
+     <body>
+         <div class="inset-0 -z-10 overflow-hidden">
+diff --git a/src/pages/[lang]/index.astro b/src/pages/[lang]/index.astro
+new file mode 100644
+index 0000000..bae2545
+--- /dev/null
++++ b/src/pages/[lang]/index.astro
+@@ -0,0 +1,271 @@
++---
++import Layout from "../../layouts/Layout.astro";
++import Badge from "../../components/Badge.astro";
++import SocialPill from "../../components/SocialPill.astro";
++import LinkedInIcon from "../../components/icons/LinkedInIcon.astro";
++import GitHubIcon from "../../components/icons/GitHubIcon.astro";
++import FacebookIcon from "../../components/icons/FacebookIcon.astro";
++import InstagramIcon from "../../components/icons/InstagramIcon.astro";
++import EmailIcon from "../../components/icons/EmailIcon.astro";
++import SectionContainerMain from "../../components/SectionContainerMain.astro";
++import GlassCardProject from "../../components/GlassCardProject.astro";
++import { translations } from "../../i18n/translations";
++import { languages, localePath } from "../../i18n/utils";
++
++// Genera /es/, /en/ y /fr/ en el build
++export function getStaticPaths() {
++    return languages.map((lang) => ({ params: { lang } }));
++}
++
++const { lang } = Astro.params as { lang: keyof typeof translations };
++const t = translations[lang];
++---
++
++<Layout title={t.meta.homeTitle} description={t.meta.description}>
++    <main>
++        <!-- Sección About/Hero -->
++        <SectionContainerMain id="about">
++            <div
++                class="flex flex-col sm:flex-row gap-x-4 gap-y-4 items-center mt-10 sm:mt-20"
++            >
++                <img
++                    class="rounded-full size-20 sm:size-13 mb-4 sm:mb-0"
++                    src="/media/img/VictorHugoAmador.jpg"
++                    alt={t.meta.imageAlt}
++                />
++                <div class="text-center sm:text-left">
++                    <h1
++                        class="text-blue-900 opacity-70 text-2xl sm:text-4xl lg:text-5xl font-bold flex flex-col sm:flex-row gap-x-4 gap-y-2 pb-4 items-center"
++                    >
++                        {t.hero.title}
++                        <a
++                            href="https://www.linkedin.com/in/victor-hugo-amador-enriquez-527695318/"
++                            target="_blank"
++                            rel="noopener"
++                            class="flex justify-center items-center"
++                        >
++                            <Badge>{t.hero.available}</Badge>
++                        </a>
++                    </h1>
++                </div>
++            </div>
++
++            <h2 class="text-xl opacity-70 text-center sm:text-left mt-4">
++                {t.hero.subtitle}
++            </h2>
++
++            <p class="text-lg opacity-70 mt-4 text-center sm:text-left">
++                {t.hero.description}
++            </p>
++
++            <!-- Redes Sociales Responsive -->
++            <nav
++                class="flex flex-wrap gap-2 mt-5 justify-center sm:justify-start"
++            >
++                <SocialPill
++                    href="https://www.linkedin.com/in/victor-hugo-amador-enriquez-527695318/"
++                >
++                    <LinkedInIcon class="size-5 sm:size-6" />
++                    <span class="hidden sm:inline">LinkedIn</span>
++                    <span class="sm:hidden">In</span>
++                </SocialPill>
++                <SocialPill href="https://github.com/vSk8erB0i">
++                    <GitHubIcon class="size-5 sm:size-6" />
++                    <span class="hidden sm:inline">GitHub</span>
++                    <span class="sm:hidden">Git</span>
++                </SocialPill>
++                <SocialPill href="https://www.facebook.com/viktor.fbx/">
++                    <FacebookIcon class="size-5 sm:size-6" />
++                    <span class="hidden sm:inline">Facebook</span>
++                    <span class="sm:hidden">FB</span>
++                </SocialPill>
++                <SocialPill href="https://www.instagram.com/viktor.fbx/">
++                    <InstagramIcon class="size-5 sm:size-6" />
++                    <span class="hidden sm:inline">Instagram</span>
++                    <span class="sm:hidden">IG</span>
++                </SocialPill>
++                <SocialPill href="mailto:vhamadore@gmail.com">
++                    <EmailIcon class="size-5 sm:size-6" />
++                    <span class="hidden sm:inline">vhamadore@gmail.com</span>
++                    <span class="sm:hidden">Email</span>
++                </SocialPill>
++            </nav>
++        </SectionContainerMain>
++
++        <!-- Sección Skills -->
++        <SectionContainerMain id="skills">
++            <h1
++                class="text-blue-900 opacity-70 text-3xl sm:text-4xl lg:text-5xl font-bold text-center mt-10 sm:mt-20 mb-8 sm:mb-12"
++            >
++                {t.skills.title}
++            </h1>
++
++            <!-- Cambia este div contenedor -->
++            <div
++                class="w-full px-4 sm:px-0 mt-8 sm:mt-16 grid grid-cols-1 gap-4 sm:gap-6 lg:gap-8"
++            >
++                <!-- Programación -->
++                <div
++                    class="bg-white/10 backdrop-blur-md border-white border-1 inset-shadow-sm shadow-md rounded-2xl p-4 sm:p-6 hover:scale-[1.02] transition-all duration-500 hover:bg-white/20 hover:shadow-sm hover:inset-shadow-md mx-auto w-full max-w-2xl"
++                >
++                    <h3
++                        class="text-black/70 font-medium text-base sm:text-lg md:text-xl mb-4 sm:mb-6 text-center"
++                    >
++                        {t.skills.categories.programming}
++                    </h3>
++                    <div class="flex flex-wrap gap-2 sm:gap-3 justify-center">
++                        {
++                            t.skills.items.programming.map((skill: string) => (
++                                <span class="rounded-full text-black/70 border border-white bg-white/10 backdrop-blur-md flex justify-center items-center gap-x-2 py-1 px-3 sm:py-2 sm:px-4 shadow-md inset-shadow-sm transition-all duration-300 hover:scale-110 hover:shadow-sm hover:bg-white/20 hover:inset-shadow-md cursor-default text-xs sm:text-sm font-medium">
++                                    {skill}
++                                </span>
++                            ))
++                        }
++                    </div>
++                </div>
++
++                <!-- Frameworks -->
++                <div
++                    class="bg-white/10 backdrop-blur-md border-white border-1 inset-shadow-sm shadow-md rounded-2xl p-4 sm:p-6 hover:scale-[1.02] transition-all duration-500 hover:bg-white/20 hover:shadow-sm hover:inset-shadow-md mx-auto w-full max-w-2xl"
++                >
++                    <h3
++                        class="text-black/70 font-medium text-base sm:text-lg md:text-xl mb-4 sm:mb-6 text-center"
++                    >
++                        {t.skills.categories.frameworks}
++                    </h3>
++                    <div class="flex flex-wrap gap-2 sm:gap-3 justify-center">
++                        {
++                            t.skills.items.frameworks.map((skill: string) => (
++                                <span class="rounded-full text-black/70 border border-white bg-white/10 backdrop-blur-md flex justify-center items-center gap-x-2 py-1 px-3 sm:py-2 sm:px-4 shadow-md inset-shadow-sm transition-all duration-300 hover:scale-110 hover:shadow-sm hover:bg-white/20 hover:inset-shadow-md cursor-default text-xs sm:text-sm font-medium">
++                                    {skill}
++                                </span>
++                            ))
++                        }
++                    </div>
++                </div>
++
++                <!-- Tools -->
++                <div
++                    class="bg-white/10 backdrop-blur-md border-white border-1 inset-shadow-sm shadow-md rounded-2xl p-4 sm:p-6 hover:scale-[1.02] transition-all duration-500 hover:bg-white/20 hover:shadow-sm hover:inset-shadow-md mx-auto w-full max-w-2xl"
++                >
++                    <h3
++                        class="text-black/70 font-medium text-base sm:text-lg md:text-xl mb-4 sm:mb-6 text-center"
++                    >
++                        {t.skills.categories.tools}
++                    </h3>
++                    <div class="flex flex-wrap gap-2 sm:gap-3 justify-center">
++                        {
++                            t.skills.items.tools.map((skill: string) => (
++                                <span class="rounded-full text-black/70 border border-white bg-white/10 backdrop-blur-md flex justify-center items-center gap-x-2 py-1 px-3 sm:py-2 sm:px-4 shadow-md inset-shadow-sm transition-all duration-300 hover:scale-110 hover:shadow-sm hover:bg-white/20 hover:inset-shadow-md cursor-default text-xs sm:text-sm font-medium">
++                                    {skill}
++                                </span>
++                            ))
++                        }
++                    </div>
++                </div>
++
++                <!-- Idiomas -->
++                <div
++                    class="bg-white/10 backdrop-blur-md border-white border-1 inset-shadow-sm shadow-md rounded-2xl p-4 sm:p-6 hover:scale-[1.02] transition-all duration-500 hover:bg-white/20 hover:shadow-sm hover:inset-shadow-md mx-auto w-full max-w-2xl"
++                >
++                    <h3
++                        class="text-black/70 font-medium text-base sm:text-lg md:text-xl mb-4 sm:mb-6 text-center"
++                    >
++                        {t.skills.categories.languages}
++                    </h3>
++                    <div class="flex flex-wrap gap-2 sm:gap-3 justify-center">
++                        {
++                            t.skills.items.languages.map((skill: string) => (
++                                <span class="rounded-full text-black/70 border border-white bg-white/10 backdrop-blur-md flex justify-center items-center gap-x-2 py-1 px-3 sm:py-2 sm:px-4 shadow-md inset-shadow-sm transition-all duration-300 hover:scale-110 hover:shadow-sm hover:bg-white/20 hover:inset-shadow-md cursor-default text-xs sm:text-sm font-medium">
++                                    {skill}
++                                </span>
++                            ))
++                        }
++                    </div>
++                </div>
++            </div>
++        </SectionContainerMain>
++
++        <!-- Sección Projects -->
++        <SectionContainerMain id="projects">
++            <h1
++                class="text-blue-900 opacity-70 text-3xl sm:text-4xl lg:text-5xl font-bold text-center mt-10 sm:mt-20 mb-8 sm:mb-12"
++            >
++                {t.projects.title}
++            </h1>
++
++            <div
++                class="w-full px-4 sm:px-0 mt-8 sm:mt-16 grid grid-cols-1 gap-4 lg:grid-cols-2"
++            >
++                <!-- Proyecto 1 - Modelado 3D -->
++                <GlassCardProject
++                    title={t.projectItems.modeling3d.title}
++                    description={t.projectItems.modeling3d.description}
++                    imageUrl="/media/img/projects/3D-gallery.png"
++                    tags={["Blender", "3D Art"]}
++                    imageGradient="from-blue-200 to-purple-300"
++                    imagePosition="left"
++                    imageRotation="slight-right"
++                    imageScale="small"
++                    cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
++                    projectUrl={localePath(lang, "/projects/3D-gallery/")}
++                />
++
++                <!-- Proyecto 2 - Portafolio Web -->
++                <GlassCardProject
++                    title={t.projectItems.webPortfolio.title}
++                    description={t.projectItems.webPortfolio.description}
++                    imageUrl="/media/img/projects/portfolio.png"
++                    tags={["Astro", "Tailwind", "TypeScript"]}
++                    imageGradient="from-blue-200 to-purple-300"
++                    imagePosition="center"
++                    imageRotation="moderate"
++                    imageScale="small"
++                    cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
++                    />
++
++                    <!-- PROYECTO 3 - folklore -->
++                    <GlassCardProject
++                        title={t.projectItems.folklore.title}
++                        description={t.projectItems.folklore.description}
++                        imageUrl="/media/img/projects/folklore.png"
++                        tags={["HTML", "CSS", "JavaScript", "Illustration"]}
++                        imageGradient="from-blue-200 to-purple-300"
++                        imagePosition="left"
++                        imageRotation="none"
++                        imageScale="medium"
++                        cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
++                        projectUrl="https://folklore-viktor.netlify.app/"
++                    />
++
++                    <!-- Proyecto 4 - Grupo Inndex -->
++                    <GlassCardProject
++                        title={t.projectItems.inndex.title}
++                        description={t.projectItems.inndex.description}
++                        imageUrl="/media/img/projects/grupoinndex.png"
++                        tags={["Wordpress", "Elementor", "Web design"]}
++                        imageGradient="from-blue-200 to-purple-300"
++                        imagePosition="right"
++                        imageRotation="slight-left"
++                        imageScale="medium"
++                        cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
++                        projectUrl="https://grupoinndex.netlify.app/"
++                    />
++
++                    <!-- PROYECTO 5 - Ludix -->
++                    <GlassCardProject
++                        title={t.projectItems.ludix.title}
++                        description={t.projectItems.ludix.description}
++                        imageUrl="/media/img/projects/ludix.png"
++                        tags={["Unity", "C#", "Game design"]}
++                        imageGradient="from-blue-200 to-purple-300"
++                        imagePosition="right"
++                        imageRotation="moderate"
++                        imageScale="small"
++                        cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
++                        projectUrl="https://www.youtube.com/watch?v=mbEin7RmL_Y&feature=youtu.be"
++                    />
++            </div>
++        </SectionContainerMain>
++    </main>
++</Layout>
+diff --git a/src/pages/projects/3D-gallery.astro b/src/pages/[lang]/projects/3D-gallery.astro
+similarity index 95%
+rename from src/pages/projects/3D-gallery.astro
+rename to src/pages/[lang]/projects/3D-gallery.astro
+index 1f031bd..b4047bc 100644
+--- a/src/pages/projects/3D-gallery.astro
++++ b/src/pages/[lang]/projects/3D-gallery.astro
+@@ -1,11 +1,13 @@
+ ---
+-import Layout from "../../layouts/Layout.astro";
+-import { translations } from "../../i18n/translations";
++import Layout from "../../../layouts/Layout.astro";
++import { translations } from "../../../i18n/translations";
++import { languages } from "../../../i18n/utils";
+ 
+-const baseUrl = import.meta.env.BASE_URL;
+-const url = new URL(Astro.request.url);
+-const langParam = url.searchParams.get("lang");
+-const lang = (langParam as keyof typeof translations) || "es";
++export function getStaticPaths() {
++  return languages.map((lang) => ({ params: { lang } }));
++}
++
++const { lang } = Astro.params as { lang: keyof typeof translations };
+ const t = translations[lang];
+ 
+ const models = [
+@@ -131,7 +133,7 @@ const models = [
+ ];
+ ---
+ 
+-<Layout title={`${t.gallery.title} | Viktor`}>
++<Layout title={t.meta.galleryTitle} description={t.meta.galleryDescription}>
+   <div id="galeria3d"
+     class="mx-auto max-w-7xl p-4 sm:p-6 md:p-8 rounded-3xl my-4 sm:my-8 w-full h-fit
+         bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-lg border border-white/90
+@@ -352,9 +354,9 @@ const models = [
+     }
+   </style>
+ 
+-  <script is:inline>
+-    document.addEventListener("DOMContentLoaded", function () {
+-      console.log("🚀 Galería 3D cargada");
++  <script>
++    document.addEventListener("astro:page-load", function () {
++      if (!document.getElementById("galeria3d")) return; // solo en la galería
+ 
+       let currentModelIndex = 0;
+       const models = document.querySelectorAll("[data-model]");
+@@ -376,7 +378,7 @@ const models = [
+         return;
+       }
+ 
+-      function showModel(index) {
++      function showModel(index: number) {
+         console.log("🎯 Mostrando modelo:", index);
+ 
+         if (models[currentModelIndex]) {
+diff --git a/src/pages/index.astro b/src/pages/index.astro
+index a1e21a2..cfe2fd1 100644
+--- a/src/pages/index.astro
++++ b/src/pages/index.astro
+@@ -1,312 +1,24 @@
+ ---
+-import "../styles/global.css";
+-import Layout from "../layouts/Layout.astro";
+-import Badge from "../components/Badge.astro";
+-import SocialPill from "../components/SocialPill.astro";
+-import LinkedInIcon from "../components/icons/LinkedInIcon.astro";
+-import GitHubIcon from "../components/icons/GitHubIcon.astro";
+-import FacebookIcon from "../components/icons/FacebookIcon.astro";
+-import InstagramIcon from "../components/icons/InstagramIcon.astro";
+-import EmailIcon from "../components/icons/EmailIcon.astro";
+-import SectionContainerMain from "../components/SectionContainerMain.astro";
+-import GlassCardProject from "../components/GlassCardProject.astro";
+-import Footer from "../components/Footer.astro";
+-import { translations } from "../i18n/translations";
+-
+-// Obtener el idioma actual desde los parámetros de URL
+-const baseUrl = import.meta.env.BASE_URL;
+-const url = new URL(Astro.request.url);
+-const langParam = url.searchParams.get("lang");
+-const lang = (langParam as keyof typeof translations) || "es";
+-const t = translations[lang];
++// "/" no tiene contenido propio: lleva a /es/ (o a /en/, /fr/ según el navegador).
++// Sin JavaScript (y para buscadores) el meta refresh envía a /es/.
++const base = import.meta.env.BASE_URL.replace(/\/$/, "");
++const target = `${base}/es/`;
+ ---
+ 
+-<Layout title="Viktor">
+-    <main>
+-        <!-- Sección About/Hero -->
+-        <SectionContainerMain id="about">
+-            <div
+-                class="flex flex-col sm:flex-row gap-x-4 gap-y-4 items-center mt-10 sm:mt-20"
+-            >
+-                <img
+-                    class="rounded-full size-20 sm:size-13 mb-4 sm:mb-0"
+-                    src={`/media/img/VictorHugoAmador.jpg`}
+-                    alt="Victor Hugo Amador desarrollador web y artista 3D"
+-                />
+-                <div class="text-center sm:text-left">
+-                    <h1
+-                        class="text-blue-900 opacity-70 text-2xl sm:text-4xl lg:text-5xl font-bold flex flex-col sm:flex-row gap-x-4 gap-y-2 pb-4 items-center"
+-                    >
+-                        {t.hero.title}
+-                        <a
+-                            href="https://www.linkedin.com/in/victor-hugo-amador-enriquez-527695318/"
+-                            target="_blank"
+-                            rel="noopener"
+-                            class="flex justify-center items-center"
+-                        >
+-                            <Badge>{t.hero.available}</Badge>
+-                        </a>
+-                    </h1>
+-                </div>
+-            </div>
+-
+-            <h2 class="text-xl opacity-70 text-center sm:text-left mt-4">
+-                {t.hero.subtitle}
+-            </h2>
+-
+-            <p class="text-lg opacity-70 mt-4 text-center sm:text-left">
+-                {t.hero.description}
+-            </p>
+-
+-            <!-- Redes Sociales Responsive -->
+-            <nav
+-                class="flex flex-wrap gap-2 mt-5 justify-center sm:justify-start"
+-            >
+-                <SocialPill
+-                    href="https://www.linkedin.com/in/victor-hugo-amador-enriquez-527695318/"
+-                >
+-                    <LinkedInIcon class="size-5 sm:size-6" />
+-                    <span class="hidden sm:inline">LinkedIn</span>
+-                    <span class="sm:hidden">In</span>
+-                </SocialPill>
+-                <SocialPill href="https://github.com/vSk8erB0i">
+-                    <GitHubIcon class="size-5 sm:size-6" />
+-                    <span class="hidden sm:inline">GitHub</span>
+-                    <span class="sm:hidden">Git</span>
+-                </SocialPill>
+-                <SocialPill href="https://www.facebook.com/viktor.fbx/">
+-                    <FacebookIcon class="size-5 sm:size-6" />
+-                    <span class="hidden sm:inline">Facebook</span>
+-                    <span class="sm:hidden">FB</span>
+-                </SocialPill>
+-                <SocialPill href="https://www.instagram.com/viktor.fbx/">
+-                    <InstagramIcon class="size-5 sm:size-6" />
+-                    <span class="hidden sm:inline">Instagram</span>
+-                    <span class="sm:hidden">IG</span>
+-                </SocialPill>
+-                <SocialPill href="mailto:vhamadore@gmail.com">
+-                    <EmailIcon class="size-5 sm:size-6" />
+-                    <span class="hidden sm:inline">vhamadore@gmail.com</span>
+-                    <span class="sm:hidden">Email</span>
+-                </SocialPill>
+-            </nav>
+-        </SectionContainerMain>
+-
+-        <!-- Sección Skills -->
+-        <SectionContainerMain id="skills">
+-            <h1
+-                class="text-blue-900 opacity-70 text-3xl sm:text-4xl lg:text-5xl font-bold text-center mt-10 sm:mt-20 mb-8 sm:mb-12"
+-            >
+-                {t.skills.title}
+-            </h1>
+-
+-            <!-- Cambia este div contenedor -->
+-            <div
+-                class="w-full px-4 sm:px-0 mt-8 sm:mt-16 grid grid-cols-1 gap-4 sm:gap-6 lg:gap-8"
+-            >
+-                <!-- Programación -->
+-                <div
+-                    class="bg-white/10 backdrop-blur-md border-white border-1 inset-shadow-sm shadow-md rounded-2xl p-4 sm:p-6 hover:scale-[1.02] transition-all duration-500 hover:bg-white/20 hover:shadow-sm hover:inset-shadow-md mx-auto w-full max-w-2xl"
+-                >
+-                    <h3
+-                        class="text-black/70 font-medium text-base sm:text-lg md:text-xl mb-4 sm:mb-6 text-center"
+-                    >
+-                        {t.skills.categories.programming}
+-                    </h3>
+-                    <div class="flex flex-wrap gap-2 sm:gap-3 justify-center">
+-                        {
+-                            t.skills.items.programming.map((skill: string) => (
+-                                <span class="rounded-full text-black/70 border border-white bg-white/10 backdrop-blur-md flex justify-center items-center gap-x-2 py-1 px-3 sm:py-2 sm:px-4 shadow-md inset-shadow-sm transition-all duration-300 hover:scale-110 hover:shadow-sm hover:bg-white/20 hover:inset-shadow-md cursor-default text-xs sm:text-sm font-medium">
+-                                    {skill}
+-                                </span>
+-                            ))
+-                        }
+-                    </div>
+-                </div>
+-
+-                <!-- Frameworks -->
+-                <div
+-                    class="bg-white/10 backdrop-blur-md border-white border-1 inset-shadow-sm shadow-md rounded-2xl p-4 sm:p-6 hover:scale-[1.02] transition-all duration-500 hover:bg-white/20 hover:shadow-sm hover:inset-shadow-md mx-auto w-full max-w-2xl"
+-                >
+-                    <h3
+-                        class="text-black/70 font-medium text-base sm:text-lg md:text-xl mb-4 sm:mb-6 text-center"
+-                    >
+-                        {t.skills.categories.frameworks}
+-                    </h3>
+-                    <div class="flex flex-wrap gap-2 sm:gap-3 justify-center">
+-                        {
+-                            t.skills.items.frameworks.map((skill: string) => (
+-                                <span class="rounded-full text-black/70 border border-white bg-white/10 backdrop-blur-md flex justify-center items-center gap-x-2 py-1 px-3 sm:py-2 sm:px-4 shadow-md inset-shadow-sm transition-all duration-300 hover:scale-110 hover:shadow-sm hover:bg-white/20 hover:inset-shadow-md cursor-default text-xs sm:text-sm font-medium">
+-                                    {skill}
+-                                </span>
+-                            ))
+-                        }
+-                    </div>
+-                </div>
+-
+-                <!-- Tools -->
+-                <div
+-                    class="bg-white/10 backdrop-blur-md border-white border-1 inset-shadow-sm shadow-md rounded-2xl p-4 sm:p-6 hover:scale-[1.02] transition-all duration-500 hover:bg-white/20 hover:shadow-sm hover:inset-shadow-md mx-auto w-full max-w-2xl"
+-                >
+-                    <h3
+-                        class="text-black/70 font-medium text-base sm:text-lg md:text-xl mb-4 sm:mb-6 text-center"
+-                    >
+-                        {t.skills.categories.tools}
+-                    </h3>
+-                    <div class="flex flex-wrap gap-2 sm:gap-3 justify-center">
+-                        {
+-                            t.skills.items.tools.map((skill: string) => (
+-                                <span class="rounded-full text-black/70 border border-white bg-white/10 backdrop-blur-md flex justify-center items-center gap-x-2 py-1 px-3 sm:py-2 sm:px-4 shadow-md inset-shadow-sm transition-all duration-300 hover:scale-110 hover:shadow-sm hover:bg-white/20 hover:inset-shadow-md cursor-default text-xs sm:text-sm font-medium">
+-                                    {skill}
+-                                </span>
+-                            ))
+-                        }
+-                    </div>
+-                </div>
+-
+-                <!-- Idiomas -->
+-                <div
+-                    class="bg-white/10 backdrop-blur-md border-white border-1 inset-shadow-sm shadow-md rounded-2xl p-4 sm:p-6 hover:scale-[1.02] transition-all duration-500 hover:bg-white/20 hover:shadow-sm hover:inset-shadow-md mx-auto w-full max-w-2xl"
+-                >
+-                    <h3
+-                        class="text-black/70 font-medium text-base sm:text-lg md:text-xl mb-4 sm:mb-6 text-center"
+-                    >
+-                        {t.skills.categories.languages}
+-                    </h3>
+-                    <div class="flex flex-wrap gap-2 sm:gap-3 justify-center">
+-                        {
+-                            t.skills.items.languages.map((skill: string) => (
+-                                <span class="rounded-full text-black/70 border border-white bg-white/10 backdrop-blur-md flex justify-center items-center gap-x-2 py-1 px-3 sm:py-2 sm:px-4 shadow-md inset-shadow-sm transition-all duration-300 hover:scale-110 hover:shadow-sm hover:bg-white/20 hover:inset-shadow-md cursor-default text-xs sm:text-sm font-medium">
+-                                    {skill}
+-                                </span>
+-                            ))
+-                        }
+-                    </div>
+-                </div>
+-            </div>
+-        </SectionContainerMain>
+-
+-        <!-- Sección Projects -->
+-        <SectionContainerMain id="projects">
+-            <h1
+-                class="text-blue-900 opacity-70 text-3xl sm:text-4xl lg:text-5xl font-bold text-center mt-10 sm:mt-20 mb-8 sm:mb-12"
+-            >
+-                {t.projects.title}
+-            </h1>
+-
+-            <div
+-                class="w-full px-4 sm:px-0 mt-8 sm:mt-16 grid grid-cols-1 gap-4 lg:grid-cols-2"
+-            >
+-                <!-- Proyecto 1 - Modelado 3D -->
+-                <GlassCardProject
+-                    title={lang === "es"
+-                        ? "Modelado 3D"
+-                        : lang === "en"
+-                          ? "3D Modeling"
+-                          : "Modélisation 3D"}
+-                    description={lang === "es"
+-                        ? "Colección de modelos y escenarios 3D creados y texturizados por mí. Cada pieza fue diseñada para mostrar diferentes estilos: realista, low poly y estilizado."
+-                        : lang === "en"
+-                          ? "Collection of 3D models and environments created and textured by me. Each piece explores different visual styles: realistic, low poly, and stylized."
+-                          : "Collection de modèles et décors 3D créés et texturés par moi-même. Chaque pièce explore différents styles visuels : réaliste, low poly et stylisé."}
+-                    imageUrl="/media/img/projects/3D-gallery.png"
+-                    tags={["Blender", "3D Art"]}
+-                    imageGradient="from-blue-200 to-purple-300"
+-                    imagePosition="left"
+-                    imageRotation="slight-right"
+-                    imageScale="small"
+-                    cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
+-                    projectUrl="/projects/3D-gallery/"
+-                />
+-
+-                <!-- Proyecto 2 - Portafolio Web -->
+-                <GlassCardProject
+-                    title={lang === "es"
+-                        ? "Portafolio Web"
+-                        : lang === "en"
+-                          ? "Web Portfolio"
+-                          : "Portfolio Web"}
+-                    description={lang === "es"
+-                        ? "Diseño y desarrollo de mi portafolio web personal con una estética limpia y animaciones suaves. Construido con Astro y Tailwind para un rendimiento óptimo."
+-                        : lang === "en"
+-                          ? "Design and development of my personal web portfolio with a clean aesthetic and smooth animations. Built with Astro and Tailwind for optimal performance."
+-                          : "Conception et développement de mon portfolio web personnel, au design épuré et aux animations fluides. Réalisé avec Astro et Tailwind pour des performances optimales."}
+-                    imageUrl="/media/img/projects/portfolio.png"
+-                    tags={["Astro", "Tailwind", "TypeScript"]}
+-                    imageGradient="from-blue-200 to-purple-300"
+-                    imagePosition="center"
+-                    imageRotation="moderate"
+-                    imageScale="small"
+-                    cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
+-                    />
+-
+-                    <!-- PROYECTO 3 - folklore -->
+-                    <GlassCardProject
+-                        title={lang === "es"
+-                            ? "folklore"
+-                            : lang === "en"
+-                              ? "folklore"
+-                              : "folklore"}
+-                        description={lang === "es"
+-                            ? "Página artística inspirada en el álbum folklore de Taylor Swift. Incluye ilustraciones originales y un diseño web que evoca la atmósfera del disco."
+-                            : lang === "en"
+-                              ? "Artistic website inspired by Taylor Swift's album folklore. Features original illustrations and a web design that captures the album's intimate atmosphere."
+-                              : "Site artistique inspiré de l'album folklore de Taylor Swift. Présente des illustrations originales et une conception évoquant l'atmosphère du disque."}
+-                        imageUrl="/media/img/projects/folklore.png"
+-                        tags={["HTML", "CSS", "JavaScript", "Illustration"]}
+-                        imageGradient="from-blue-200 to-purple-300"
+-                        imagePosition="left"
+-                        imageRotation="none"
+-                        imageScale="medium"
+-                        cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
+-                        projectUrl="https://folklore-viktor.netlify.app/"
+-                    />
+-
+-                    <!-- Proyecto 4 - Grupo Inndex -->
+-                    <GlassCardProject
+-                        title={lang === "es"
+-                            ? "Grupo Inndex"
+-                            : lang === "en"
+-                              ? "Grupo Inndex"
+-                              : "Grupo Inndex"}
+-                        description={lang === "es"
+-                            ? "Rediseño completo del sitio web corporativo de Grupo Inndex. Implementado en WordPress con optimización de estructura, diseño y velocidad de carga."
+-                            : lang === "en"
+-                              ? "Complete redesign of Grupo Inndex's corporate website. Implemented in WordPress with improved structure, design, and loading performance."
+-                              : "Refonte complète du site web d'entreprise de Grupo Inndex. Réalisée sous WordPress avec une meilleure structure, conception et rapidité de chargement."}
+-                        imageUrl="/media/img/projects/grupoinndex.png"
+-                        tags={["Wordpress", "Elementor", "Web design"]}
+-                        imageGradient="from-blue-200 to-purple-300"
+-                        imagePosition="right"
+-                        imageRotation="slight-left"
+-                        imageScale="medium"
+-                        cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
+-                        projectUrl="https://grupoinndex.netlify.app/"
+-                    />
+-
+-                    <!-- PROYECTO 5 - Ludix -->
+-                    <GlassCardProject
+-                        title={lang === "es"
+-                            ? "Ludix"
+-                            : lang === "en"
+-                              ? "Ludix"
+-                              : "Ludix"}
+-                        description={lang === "es"
+-                            ? "Desarrollo de minijuegos educativos para la app Ludix, diseñada en Unity para aprender idiomas de forma interactiva. Incluye mecánicas de gamificación."
+-                            : lang === "en"
+-                              ? "Development of educational mini-games for Ludix, a Unity-based app designed to make language learning interactive and fun."
+-                              : "Développement de mini-jeux éducatifs pour Ludix, une application créée avec Unity pour rendre l'apprentissage des langues interactif et ludique."}
+-                        imageUrl="/media/img/projects/ludix.png"
+-                        tags={["Unity", "C#", "Game design"]}
+-                        imageGradient="from-blue-200 to-purple-300"
+-                        imagePosition="right"
+-                        imageRotation="moderate"
+-                        imageScale="small"
+-                        cardClass="min-h-[300px] sm:min-h-[400px] mx-auto w-full"
+-                        projectUrl="https://www.youtube.com/watch?v=mbEin7RmL_Y&feature=youtu.be"
+-                    />
+-                </GlassCardProject>
+-            </div>
+-        </SectionContainerMain>
+-    </main>
+-</Layout>
++<!doctype html>
++<html lang="es">
++    <head>
++        <meta charset="utf-8" />
++        <title>Victor Hugo Amador</title>
++        <meta name="robots" content="noindex" />
++        <meta http-equiv="refresh" content={`0; url=${target}`} />
++        <link rel="canonical" href={target} />
++        <script is:inline define:vars={{ base }}>
++            var l = (navigator.language || "es").slice(0, 2);
++            location.replace(base + "/" + (l === "en" || l === "fr" ? l : "es") + "/" + location.hash);
++        </script>
++    </head>
++    <body>
++        <a href={target}>Victor Hugo Amador</a>
++    </body>
++</html>

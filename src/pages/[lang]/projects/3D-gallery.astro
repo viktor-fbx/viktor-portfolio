@@ -1,11 +1,13 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import { translations } from "../../i18n/translations";
+import Layout from "../../../layouts/Layout.astro";
+import { translations } from "../../../i18n/translations";
+import { languages } from "../../../i18n/utils";
 
-const baseUrl = import.meta.env.BASE_URL;
-const url = new URL(Astro.request.url);
-const langParam = url.searchParams.get("lang");
-const lang = (langParam as keyof typeof translations) || "es";
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: keyof typeof translations };
 const t = translations[lang];
 
 const models = [
@@ -131,7 +133,7 @@ const models = [
 ];
 ---
 
-<Layout title={`${t.gallery.title} | Viktor`}>
+<Layout title={t.meta.galleryTitle} description={t.meta.galleryDescription}>
   <div id="galeria3d"
     class="mx-auto max-w-7xl p-4 sm:p-6 md:p-8 rounded-3xl my-4 sm:my-8 w-full h-fit
         bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-lg border border-white/90
@@ -352,9 +354,9 @@ const models = [
     }
   </style>
 
-  <script is:inline>
-    document.addEventListener("DOMContentLoaded", function () {
-      console.log("🚀 Galería 3D cargada");
+  <script>
+    document.addEventListener("astro:page-load", function () {
+      if (!document.getElementById("galeria3d")) return; // solo en la galería
 
       let currentModelIndex = 0;
       const models = document.querySelectorAll("[data-model]");
@@ -376,7 +378,7 @@ const models = [
         return;
       }
 
-      function showModel(index) {
+      function showModel(index: number) {
         console.log("🎯 Mostrando modelo:", index);
 
         if (models[currentModelIndex]) {

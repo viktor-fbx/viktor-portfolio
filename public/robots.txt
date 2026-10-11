@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://viktor-fbx.netlify.app/sitemap-index.xml

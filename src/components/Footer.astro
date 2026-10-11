@@ -1,9 +1,8 @@
 ---
 import { translations } from "../i18n/translations";
+import { getLangFromUrl } from "../i18n/utils";
 
-const url = new URL(Astro.request.url);
-const langParam = url.searchParams.get('lang');
-const lang = langParam as keyof typeof translations || 'es';
+const lang = getLangFromUrl(Astro.url);
 const t = translations[lang];
 ---
 
@@ -22,7 +21,7 @@ const t = translations[lang];
             <div class="flex items-center gap-3 text-blue-900/60 text-xs sm:text-sm font-light">
                 <span class="text-lg animate-pulse">✨</span>
                 <span class="bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20">
-                    {lang === 'es' ? 'Creado con' : lang === 'en' ? 'Built with' : 'Construit avec'} <span class="font-semibold text-blue-600">Astro</span>
+                    {t.footer.builtWith} <span class="font-semibold text-blue-600">Astro</span>
                 </span>
                 <span class="text-lg animate-pulse">✨</span>
             </div>

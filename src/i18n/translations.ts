@@ -1,5 +1,42 @@
 export const translations = {
     es: {
+        meta: {
+            homeTitle: "Victor Hugo Amador | Desarrollador Web y Artista 3D",
+            galleryTitle: "Galería 3D | Victor Hugo Amador",
+            description: "Portafolio de Victor Hugo Amador: desarrollo web con Astro, Angular y Vue, y modelado 3D con Blender.",
+            galleryDescription: "Galería interactiva de modelos 3D de Victor Hugo Amador: personajes, productos y escenarios low poly y realistas.",
+            imageAlt: "Victor Hugo Amador, desarrollador web y artista 3D"
+        },
+        footer: {
+            builtWith: "Creado con"
+        },
+        a11y: {
+            openMenu: "Abrir menú",
+            language: "Idioma",
+            logoAlt: "Logotipo de Viktor"
+        },
+        projectItems: {
+            modeling3d: {
+                title: "Modelado 3D",
+                description: "Colección de modelos y escenarios 3D creados y texturizados por mí. Cada pieza fue diseñada para mostrar diferentes estilos: realista, low poly y estilizado."
+            },
+            webPortfolio: {
+                title: "Portafolio Web",
+                description: "Diseño y desarrollo de mi portafolio web personal con una estética limpia y animaciones suaves. Construido con Astro y Tailwind para un rendimiento óptimo."
+            },
+            folklore: {
+                title: "folklore",
+                description: "Página artística inspirada en el álbum folklore de Taylor Swift. Incluye ilustraciones originales y un diseño web que evoca la atmósfera del disco."
+            },
+            inndex: {
+                title: "Grupo Inndex",
+                description: "Rediseño completo del sitio web corporativo de Grupo Inndex. Implementado en WordPress con optimización de estructura, diseño y velocidad de carga."
+            },
+            ludix: {
+                title: "Ludix",
+                description: "Desarrollo de minijuegos educativos para la app Ludix, diseñada en Unity para aprender idiomas de forma interactiva. Incluye mecánicas de gamificación."
+            }
+        },
         nav: {
             home: "Inicio",
             about: "Sobre Mí",
@@ -95,6 +132,43 @@ export const translations = {
         }
     },
     en: {
+        meta: {
+            homeTitle: "Victor Hugo Amador | Web Developer & 3D Artist",
+            galleryTitle: "3D Gallery | Victor Hugo Amador",
+            description: "Portfolio of Victor Hugo Amador: web development with Astro, Angular and Vue, and 3D modeling with Blender.",
+            galleryDescription: "Interactive gallery of 3D models by Victor Hugo Amador: characters, products and low poly and realistic scenes.",
+            imageAlt: "Victor Hugo Amador, web developer and 3D artist"
+        },
+        footer: {
+            builtWith: "Built with"
+        },
+        a11y: {
+            openMenu: "Open menu",
+            language: "Language",
+            logoAlt: "Viktor logo"
+        },
+        projectItems: {
+            modeling3d: {
+                title: "3D Modeling",
+                description: "Collection of 3D models and environments created and textured by me. Each piece explores different visual styles: realistic, low poly, and stylized."
+            },
+            webPortfolio: {
+                title: "Web Portfolio",
+                description: "Design and development of my personal web portfolio with a clean aesthetic and smooth animations. Built with Astro and Tailwind for optimal performance."
+            },
+            folklore: {
+                title: "folklore",
+                description: "Artistic website inspired by Taylor Swift's album folklore. Features original illustrations and a web design that captures the album's intimate atmosphere."
+            },
+            inndex: {
+                title: "Grupo Inndex",
+                description: "Complete redesign of Grupo Inndex's corporate website. Implemented in WordPress with improved structure, design, and loading performance."
+            },
+            ludix: {
+                title: "Ludix",
+                description: "Development of educational mini-games for Ludix, a Unity-based app designed to make language learning interactive and fun."
+            }
+        },
         nav: {
             home: "Home",
             about: "About",
@@ -181,6 +255,43 @@ export const translations = {
         }
     },
     fr: {
+        meta: {
+            homeTitle: "Victor Hugo Amador | Développeur Web et Artiste 3D",
+            galleryTitle: "Galerie 3D | Victor Hugo Amador",
+            description: "Portfolio de Victor Hugo Amador : développement web avec Astro, Angular et Vue, et modélisation 3D avec Blender.",
+            galleryDescription: "Galerie interactive de modèles 3D de Victor Hugo Amador : personnages, produits et décors low poly et réalistes.",
+            imageAlt: "Victor Hugo Amador, développeur web et artiste 3D"
+        },
+        footer: {
+            builtWith: "Construit avec"
+        },
+        a11y: {
+            openMenu: "Ouvrir le menu",
+            language: "Langue",
+            logoAlt: "Logo de Viktor"
+        },
+        projectItems: {
+            modeling3d: {
+                title: "Modélisation 3D",
+                description: "Collection de modèles et décors 3D créés et texturés par moi-même. Chaque pièce explore différents styles visuels : réaliste, low poly et stylisé."
+            },
+            webPortfolio: {
+                title: "Portfolio Web",
+                description: "Conception et développement de mon portfolio web personnel, au design épuré et aux animations fluides. Réalisé avec Astro et Tailwind pour des performances optimales."
+            },
+            folklore: {
+                title: "folklore",
+                description: "Site artistique inspiré de l'album folklore de Taylor Swift. Présente des illustrations originales et une conception évoquant l'atmosphère du disque."
+            },
+            inndex: {
+                title: "Grupo Inndex",
+                description: "Refonte complète du site web d'entreprise de Grupo Inndex. Réalisée sous WordPress avec une meilleure structure, conception et rapidité de chargement."
+            },
+            ludix: {
+                title: "Ludix",
+                description: "Développement de mini-jeux éducatifs pour Ludix, une application créée avec Unity pour rendre l'apprentissage des langues interactif et ludique."
+            }
+        },
         nav: {
             home: "Accueil",
             about: "À propos",
