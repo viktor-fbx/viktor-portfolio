@@ -3,7 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { translations } from "../i18n/translations";
-import { languages, getLangFromUrl, switchLangPath } from "../i18n/utils";
+import { languages, getLangFromUrl, switchLangPath, asset } from "../i18n/utils";
 import "../styles/global.css";
 import "@fontsource-variable/onest";
 
@@ -24,7 +24,7 @@ const alternates = languages.map((l) => ({
     href: absolute(switchLangPath(Astro.url, l)),
 }));
 const ogLocale = { es: "es_MX", en: "en_US", fr: "fr_FR" } as const;
-const ogImage = absolute("/media/img/VictorHugoAmador.jpg");
+const ogImage = absolute(asset("/media/img/VictorHugoAmador.jpg"));
 
 const schema = {
     "@context": "https://schema.org",
@@ -51,22 +51,22 @@ const schema = {
         <link
             rel="apple-touch-icon"
             sizes="180x180"
-            href="/media/apple-touch-icon.png"
+            href={asset("/media/apple-touch-icon.png")}
         />
         <link
             rel="icon"
             type="image/png"
             sizes="32x32"
-            href="/media/favicon-32x32.png"
+            href={asset("/media/favicon-32x32.png")}
         />
         <link
             rel="icon"
             type="image/png"
             sizes="16x16"
-            href="/media/favicon-16x16.png"
+            href={asset("/media/favicon-16x16.png")}
         />
-        <link rel="manifest" href="/media/site.webmanifest" />
-        <link rel="icon" href="/media/favicon.ico" sizes="any" />
+        <link rel="manifest" href={asset("/media/site.webmanifest")} />
+        <link rel="icon" href={asset("/media/favicon.ico")} sizes="any" />
 
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>

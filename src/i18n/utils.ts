@@ -22,6 +22,10 @@ export function getLangFromUrl(url: URL): Language {
 /** Textos del idioma de la URL actual. */
 export const useTranslations = (url: URL) => translations[getLangFromUrl(url)];
 
+/** Ruta a un archivo de /public respetando el base: asset("/media/x.png") */
+export const asset = (path: string) =>
+    `${base}${path.startsWith("/") ? path : `/${path}`}`;
+
 /** localePath("en", "/projects/3D-gallery/") -> "/en/projects/3D-gallery/" */
 export function localePath(lang: Language, path = "/") {
     const clean = path.startsWith("/") ? path : `/${path}`;

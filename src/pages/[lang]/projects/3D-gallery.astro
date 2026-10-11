@@ -1,7 +1,7 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import { translations } from "../../../i18n/translations";
-import { languages } from "../../../i18n/utils";
+import { languages, asset } from "../../../i18n/utils";
 
 export function getStaticPaths() {
   return languages.map((lang) => ({ params: { lang } }));
@@ -13,8 +13,8 @@ const t = translations[lang];
 const models = [
   {
     id: 1,
-    src: `/models/kewpie.glb`,
-    poster: `/posters/3d/kewpie.webp`,
+    src: asset("/models/kewpie.glb"),
+    poster: asset("/posters/3d/kewpie.webp"),
     title: t.gallery.models.kewpie.title,
     description: "Modelo 3D interactivo",
     details: t.gallery.models.kewpie.details,
@@ -28,8 +28,8 @@ const models = [
   },
   {
     id: 2,
-    src: `/models/lowpolySailorMoon.glb`,
-    poster: `/posters/3d/lowpolySailorMoon.webp`,
+    src: asset("/models/lowpolySailorMoon.glb"),
+    poster: asset("/posters/3d/lowpolySailorMoon.webp"),
     title: t.gallery.models.sailorMoon.title,
     description: "Configurador 3D interactivo",
     details: t.gallery.models.sailorMoon.details,
@@ -43,8 +43,8 @@ const models = [
   },
   {
     id: 3,
-    src: `/models/IsoRoom.glb`,
-    poster: `/posters/3d/IsoRoom.webp`,
+    src: asset("/models/IsoRoom.glb"),
+    poster: asset("/posters/3d/IsoRoom.webp"),
     title: t.gallery.models.IsoRoom.title,
     description: "Configurador 3D interactivo",
     details: t.gallery.models.IsoRoom.details,
@@ -58,8 +58,8 @@ const models = [
   },
   {
     id: 4,
-    src: `/models/juicy-lasting-tint.glb`,
-    poster: `/posters/3d/juicy-lasting-tint.webp`,
+    src: asset("/models/juicy-lasting-tint.glb"),
+    poster: asset("/posters/3d/juicy-lasting-tint.webp"),
     title: t.gallery.models.juicyTint.title,
     description: "Configurador 3D interactivo",
     details: t.gallery.models.juicyTint.details,
@@ -69,8 +69,8 @@ const models = [
   },
   {
     id: 5,
-    src: `/models/han-all-fix-mascara.glb`,
-    poster: `/posters/3d/han-all-fix-mascara.webp`,
+    src: asset("/models/han-all-fix-mascara.glb"),
+    poster: asset("/posters/3d/han-all-fix-mascara.webp"),
     title: t.gallery.models.hanAllMascara.title,
     description: "Configurador 3D interactivo",
     details: t.gallery.models.hanAllMascara.details,
@@ -80,8 +80,8 @@ const models = [
   },
   {
     id: 6,
-    src: `/models/better-than-cheek-anim.glb`,
-    poster: `/posters/3d/better-than-cheek.webp`,
+    src: asset("/models/better-than-cheek-anim.glb"),
+    poster: asset("/posters/3d/better-than-cheek.webp"),
     title: t.gallery.models.betterThanCheek.title,
     description: "Configurador 3D interactivo",
     details: t.gallery.models.betterThanCheek.details,
@@ -91,8 +91,8 @@ const models = [
   },
   {
     id: 7,
-    src: `/models/house.glb`,
-    poster: `/posters/3d/house.webp`,
+    src: asset("/models/house.glb"),
+    poster: asset("/posters/3d/house.webp"),
     title: t.gallery.models.countryHouse.title,
     description: "Configurador 3D interactivo",
     details: t.gallery.models.countryHouse.details,
@@ -102,8 +102,8 @@ const models = [
   },
   {
     id: 8,
-    src: `/models/peter.glb`,
-    poster: `/posters/3d/peter.webp`,
+    src: asset("/models/peter.glb"),
+    poster: asset("/posters/3d/peter.webp"),
     title: t.gallery.models.peter.title,
     description: "Configurador 3D interactivo",
     details: t.gallery.models.peter.details,
@@ -117,8 +117,8 @@ const models = [
   },
   {
     id: 9,
-    src: `/models/cat.glb`,
-    poster: `/posters/3d/cat.webp`,
+    src: asset("/models/cat.glb"),
+    poster: asset("/posters/3d/cat.webp"),
     title: t.gallery.models.cat.title,
     description: "Configurador 3D interactivo",
     details: t.gallery.models.cat.details,

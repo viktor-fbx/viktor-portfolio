@@ -1,7 +1,7 @@
 ---
 import LanguageSwitcher from "./LanguageSwitcher.astro";
 import { translations } from "../i18n/translations";
-import { getLangFromUrl, localePath } from "../i18n/utils";
+import { getLangFromUrl, localePath, asset } from "../i18n/utils";
 
 const lang = getLangFromUrl(Astro.url);
 const t = translations[lang];
@@ -20,7 +20,7 @@ const anchor = (id: string) => (isHomePage ? `#${id}` : `${homePath}#${id}`);
 >
     <a href={homePath} class="flex-shrink-0">
         <img
-            src="/media/img/Viktor-logo-liquid-metal.png"
+            src={asset("/media/img/Viktor-logo-liquid-metal.png")}
             alt={t.a11y.logoAlt}
             width={85}
             height={85}

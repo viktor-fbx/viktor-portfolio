@@ -1,0 +1,266 @@
+diff --git a/src/components/Header.astro b/src/components/Header.astro
+index e33db68..425bc80 100644
+--- a/src/components/Header.astro
++++ b/src/components/Header.astro
+@@ -1,7 +1,7 @@
+ ---
+ import LanguageSwitcher from "./LanguageSwitcher.astro";
+ import { translations } from "../i18n/translations";
+-import { getLangFromUrl, localePath } from "../i18n/utils";
++import { getLangFromUrl, localePath, asset } from "../i18n/utils";
+ 
+ const lang = getLangFromUrl(Astro.url);
+ const t = translations[lang];
+@@ -20,7 +20,7 @@ const anchor = (id: string) => (isHomePage ? `#${id}` : `${homePath}#${id}`);
+ >
+     <a href={homePath} class="flex-shrink-0">
+         <img
+-            src="/media/img/Viktor-logo-liquid-metal.png"
++            src={asset("/media/img/Viktor-logo-liquid-metal.png")}
+             alt={t.a11y.logoAlt}
+             width={85}
+             height={85}
+diff --git a/src/i18n/utils.ts b/src/i18n/utils.ts
+index faf711d..34b8ebd 100644
+--- a/src/i18n/utils.ts
++++ b/src/i18n/utils.ts
+@@ -22,6 +22,10 @@ export function getLangFromUrl(url: URL): Language {
+ /** Textos del idioma de la URL actual. */
+ export const useTranslations = (url: URL) => translations[getLangFromUrl(url)];
+ 
++/** Ruta a un archivo de /public respetando el base: asset("/media/x.png") */
++export const asset = (path: string) =>
++    `${base}${path.startsWith("/") ? path : `/${path}`}`;
++
+ /** localePath("en", "/projects/3D-gallery/") -> "/en/projects/3D-gallery/" */
+ export function localePath(lang: Language, path = "/") {
+     const clean = path.startsWith("/") ? path : `/${path}`;
+diff --git a/src/layouts/Layout.astro b/src/layouts/Layout.astro
+index bb05583..9c797b1 100644
+--- a/src/layouts/Layout.astro
++++ b/src/layouts/Layout.astro
+@@ -3,7 +3,7 @@ import { ClientRouter } from "astro:transitions";
+ import Header from "../components/Header.astro";
+ import Footer from "../components/Footer.astro";
+ import { translations } from "../i18n/translations";
+-import { languages, getLangFromUrl, switchLangPath } from "../i18n/utils";
++import { languages, getLangFromUrl, switchLangPath, asset } from "../i18n/utils";
+ import "../styles/global.css";
+ import "@fontsource-variable/onest";
+ 
+@@ -24,7 +24,7 @@ const alternates = languages.map((l) => ({
+     href: absolute(switchLangPath(Astro.url, l)),
+ }));
+ const ogLocale = { es: "es_MX", en: "en_US", fr: "fr_FR" } as const;
+-const ogImage = absolute("/media/img/VictorHugoAmador.jpg");
++const ogImage = absolute(asset("/media/img/VictorHugoAmador.jpg"));
+ 
+ const schema = {
+     "@context": "https://schema.org",
+@@ -51,22 +51,22 @@ const schema = {
+         <link
+             rel="apple-touch-icon"
+             sizes="180x180"
+-            href="/media/apple-touch-icon.png"
++            href={asset("/media/apple-touch-icon.png")}
+         />
+         <link
+             rel="icon"
+             type="image/png"
+             sizes="32x32"
+-            href="/media/favicon-32x32.png"
++            href={asset("/media/favicon-32x32.png")}
+         />
+         <link
+             rel="icon"
+             type="image/png"
+             sizes="16x16"
+-            href="/media/favicon-16x16.png"
++            href={asset("/media/favicon-16x16.png")}
+         />
+-        <link rel="manifest" href="/media/site.webmanifest" />
+-        <link rel="icon" href="/media/favicon.ico" sizes="any" />
++        <link rel="manifest" href={asset("/media/site.webmanifest")} />
++        <link rel="icon" href={asset("/media/favicon.ico")} sizes="any" />
+ 
+         <meta name="generator" content={Astro.generator} />
+         <title>{title}</title>
+diff --git a/src/pages/[lang]/index.astro b/src/pages/[lang]/index.astro
+index bae2545..219a258 100644
+--- a/src/pages/[lang]/index.astro
++++ b/src/pages/[lang]/index.astro
+@@ -10,7 +10,7 @@ import EmailIcon from "../../components/icons/EmailIcon.astro";
+ import SectionContainerMain from "../../components/SectionContainerMain.astro";
+ import GlassCardProject from "../../components/GlassCardProject.astro";
+ import { translations } from "../../i18n/translations";
+-import { languages, localePath } from "../../i18n/utils";
++import { languages, localePath, asset } from "../../i18n/utils";
+ 
+ // Genera /es/, /en/ y /fr/ en el build
+ export function getStaticPaths() {
+@@ -30,7 +30,7 @@ const t = translations[lang];
+             >
+                 <img
+                     class="rounded-full size-20 sm:size-13 mb-4 sm:mb-0"
+-                    src="/media/img/VictorHugoAmador.jpg"
++                    src={asset("/media/img/VictorHugoAmador.jpg")}
+                     alt={t.meta.imageAlt}
+                 />
+                 <div class="text-center sm:text-left">
+@@ -201,7 +201,7 @@ const t = translations[lang];
+                 <GlassCardProject
+                     title={t.projectItems.modeling3d.title}
+                     description={t.projectItems.modeling3d.description}
+-                    imageUrl="/media/img/projects/3D-gallery.png"
++                    imageUrl={asset("/media/img/projects/3D-gallery.png")}
+                     tags={["Blender", "3D Art"]}
+                     imageGradient="from-blue-200 to-purple-300"
+                     imagePosition="left"
+@@ -215,7 +215,7 @@ const t = translations[lang];
+                 <GlassCardProject
+                     title={t.projectItems.webPortfolio.title}
+                     description={t.projectItems.webPortfolio.description}
+-                    imageUrl="/media/img/projects/portfolio.png"
++                    imageUrl={asset("/media/img/projects/portfolio.png")}
+                     tags={["Astro", "Tailwind", "TypeScript"]}
+                     imageGradient="from-blue-200 to-purple-300"
+                     imagePosition="center"
+@@ -228,7 +228,7 @@ const t = translations[lang];
+                     <GlassCardProject
+                         title={t.projectItems.folklore.title}
+                         description={t.projectItems.folklore.description}
+-                        imageUrl="/media/img/projects/folklore.png"
++                        imageUrl={asset("/media/img/projects/folklore.png")}
+                         tags={["HTML", "CSS", "JavaScript", "Illustration"]}
+                         imageGradient="from-blue-200 to-purple-300"
+                         imagePosition="left"
+@@ -242,7 +242,7 @@ const t = translations[lang];
+                     <GlassCardProject
+                         title={t.projectItems.inndex.title}
+                         description={t.projectItems.inndex.description}
+-                        imageUrl="/media/img/projects/grupoinndex.png"
++                        imageUrl={asset("/media/img/projects/grupoinndex.png")}
+                         tags={["Wordpress", "Elementor", "Web design"]}
+                         imageGradient="from-blue-200 to-purple-300"
+                         imagePosition="right"
+@@ -256,7 +256,7 @@ const t = translations[lang];
+                     <GlassCardProject
+                         title={t.projectItems.ludix.title}
+                         description={t.projectItems.ludix.description}
+-                        imageUrl="/media/img/projects/ludix.png"
++                        imageUrl={asset("/media/img/projects/ludix.png")}
+                         tags={["Unity", "C#", "Game design"]}
+                         imageGradient="from-blue-200 to-purple-300"
+                         imagePosition="right"
+diff --git a/src/pages/[lang]/projects/3D-gallery.astro b/src/pages/[lang]/projects/3D-gallery.astro
+index b4047bc..2d27ca2 100644
+--- a/src/pages/[lang]/projects/3D-gallery.astro
++++ b/src/pages/[lang]/projects/3D-gallery.astro
+@@ -1,7 +1,7 @@
+ ---
+ import Layout from "../../../layouts/Layout.astro";
+ import { translations } from "../../../i18n/translations";
+-import { languages } from "../../../i18n/utils";
++import { languages, asset } from "../../../i18n/utils";
+ 
+ export function getStaticPaths() {
+   return languages.map((lang) => ({ params: { lang } }));
+@@ -13,8 +13,8 @@ const t = translations[lang];
+ const models = [
+   {
+     id: 1,
+-    src: `/models/kewpie.glb`,
+-    poster: `/posters/3d/kewpie.webp`,
++    src: asset("/models/kewpie.glb"),
++    poster: asset("/posters/3d/kewpie.webp"),
+     title: t.gallery.models.kewpie.title,
+     description: "Modelo 3D interactivo",
+     details: t.gallery.models.kewpie.details,
+@@ -28,8 +28,8 @@ const models = [
+   },
+   {
+     id: 2,
+-    src: `/models/lowpolySailorMoon.glb`,
+-    poster: `/posters/3d/lowpolySailorMoon.webp`,
++    src: asset("/models/lowpolySailorMoon.glb"),
++    poster: asset("/posters/3d/lowpolySailorMoon.webp"),
+     title: t.gallery.models.sailorMoon.title,
+     description: "Configurador 3D interactivo",
+     details: t.gallery.models.sailorMoon.details,
+@@ -43,8 +43,8 @@ const models = [
+   },
+   {
+     id: 3,
+-    src: `/models/IsoRoom.glb`,
+-    poster: `/posters/3d/IsoRoom.webp`,
++    src: asset("/models/IsoRoom.glb"),
++    poster: asset("/posters/3d/IsoRoom.webp"),
+     title: t.gallery.models.IsoRoom.title,
+     description: "Configurador 3D interactivo",
+     details: t.gallery.models.IsoRoom.details,
+@@ -58,8 +58,8 @@ const models = [
+   },
+   {
+     id: 4,
+-    src: `/models/juicy-lasting-tint.glb`,
+-    poster: `/posters/3d/juicy-lasting-tint.webp`,
++    src: asset("/models/juicy-lasting-tint.glb"),
++    poster: asset("/posters/3d/juicy-lasting-tint.webp"),
+     title: t.gallery.models.juicyTint.title,
+     description: "Configurador 3D interactivo",
+     details: t.gallery.models.juicyTint.details,
+@@ -69,8 +69,8 @@ const models = [
+   },
+   {
+     id: 5,
+-    src: `/models/han-all-fix-mascara.glb`,
+-    poster: `/posters/3d/han-all-fix-mascara.webp`,
++    src: asset("/models/han-all-fix-mascara.glb"),
++    poster: asset("/posters/3d/han-all-fix-mascara.webp"),
+     title: t.gallery.models.hanAllMascara.title,
+     description: "Configurador 3D interactivo",
+     details: t.gallery.models.hanAllMascara.details,
+@@ -80,8 +80,8 @@ const models = [
+   },
+   {
+     id: 6,
+-    src: `/models/better-than-cheek-anim.glb`,
+-    poster: `/posters/3d/better-than-cheek.webp`,
++    src: asset("/models/better-than-cheek-anim.glb"),
++    poster: asset("/posters/3d/better-than-cheek.webp"),
+     title: t.gallery.models.betterThanCheek.title,
+     description: "Configurador 3D interactivo",
+     details: t.gallery.models.betterThanCheek.details,
+@@ -91,8 +91,8 @@ const models = [
+   },
+   {
+     id: 7,
+-    src: `/models/house.glb`,
+-    poster: `/posters/3d/house.webp`,
++    src: asset("/models/house.glb"),
++    poster: asset("/posters/3d/house.webp"),
+     title: t.gallery.models.countryHouse.title,
+     description: "Configurador 3D interactivo",
+     details: t.gallery.models.countryHouse.details,
+@@ -102,8 +102,8 @@ const models = [
+   },
+   {
+     id: 8,
+-    src: `/models/peter.glb`,
+-    poster: `/posters/3d/peter.webp`,
++    src: asset("/models/peter.glb"),
++    poster: asset("/posters/3d/peter.webp"),
+     title: t.gallery.models.peter.title,
+     description: "Configurador 3D interactivo",
+     details: t.gallery.models.peter.details,
+@@ -117,8 +117,8 @@ const models = [
+   },
+   {
+     id: 9,
+-    src: `/models/cat.glb`,
+-    poster: `/posters/3d/cat.webp`,
++    src: asset("/models/cat.glb"),
++    poster: asset("/posters/3d/cat.webp"),
+     title: t.gallery.models.cat.title,
+     description: "Configurador 3D interactivo",
+     details: t.gallery.models.cat.details,

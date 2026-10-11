@@ -10,7 +10,7 @@ import EmailIcon from "../../components/icons/EmailIcon.astro";
 import SectionContainerMain from "../../components/SectionContainerMain.astro";
 import GlassCardProject from "../../components/GlassCardProject.astro";
 import { translations } from "../../i18n/translations";
-import { languages, localePath } from "../../i18n/utils";
+import { languages, localePath, asset } from "../../i18n/utils";
 
 // Genera /es/, /en/ y /fr/ en el build
 export function getStaticPaths() {
@@ -30,7 +30,7 @@ const t = translations[lang];
             >
                 <img
                     class="rounded-full size-20 sm:size-13 mb-4 sm:mb-0"
-                    src="/media/img/VictorHugoAmador.jpg"
+                    src={asset("/media/img/VictorHugoAmador.jpg")}
                     alt={t.meta.imageAlt}
                 />
                 <div class="text-center sm:text-left">
@@ -201,7 +201,7 @@ const t = translations[lang];
                 <GlassCardProject
                     title={t.projectItems.modeling3d.title}
                     description={t.projectItems.modeling3d.description}
-                    imageUrl="/media/img/projects/3D-gallery.png"
+                    imageUrl={asset("/media/img/projects/3D-gallery.png")}
                     tags={["Blender", "3D Art"]}
                     imageGradient="from-blue-200 to-purple-300"
                     imagePosition="left"
@@ -215,7 +215,7 @@ const t = translations[lang];
                 <GlassCardProject
                     title={t.projectItems.webPortfolio.title}
                     description={t.projectItems.webPortfolio.description}
-                    imageUrl="/media/img/projects/portfolio.png"
+                    imageUrl={asset("/media/img/projects/portfolio.png")}
                     tags={["Astro", "Tailwind", "TypeScript"]}
                     imageGradient="from-blue-200 to-purple-300"
                     imagePosition="center"
@@ -228,7 +228,7 @@ const t = translations[lang];
                     <GlassCardProject
                         title={t.projectItems.folklore.title}
                         description={t.projectItems.folklore.description}
-                        imageUrl="/media/img/projects/folklore.png"
+                        imageUrl={asset("/media/img/projects/folklore.png")}
                         tags={["HTML", "CSS", "JavaScript", "Illustration"]}
                         imageGradient="from-blue-200 to-purple-300"
                         imagePosition="left"
@@ -242,7 +242,7 @@ const t = translations[lang];
                     <GlassCardProject
                         title={t.projectItems.inndex.title}
                         description={t.projectItems.inndex.description}
-                        imageUrl="/media/img/projects/grupoinndex.png"
+                        imageUrl={asset("/media/img/projects/grupoinndex.png")}
                         tags={["Wordpress", "Elementor", "Web design"]}
                         imageGradient="from-blue-200 to-purple-300"
                         imagePosition="right"
@@ -256,7 +256,7 @@ const t = translations[lang];
                     <GlassCardProject
                         title={t.projectItems.ludix.title}
                         description={t.projectItems.ludix.description}
-                        imageUrl="/media/img/projects/ludix.png"
+                        imageUrl={asset("/media/img/projects/ludix.png")}
                         tags={["Unity", "C#", "Game design"]}
                         imageGradient="from-blue-200 to-purple-300"
                         imagePosition="right"
