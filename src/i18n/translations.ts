@@ -62,10 +62,10 @@ export const translations = {
                 languages: "Idiomas"
             },
             items: {
-                programming: ["JavaScript", "TypeScript", "Python", "Java", "C++", "HTML/CSS"],
-                frameworks: ["Angular", "Astro", "Vue.js", "Tailwind CSS", "Three.js"],
-                tools: ["Blender", "Git", "Figma", "Photoshop", "VS Code", "MongoDB"],
-                languages: ["Español (Nativo)", "Inglés (C1)", "Francés (B2)", "Japonés (Básico)"]
+                programming: ["JavaScript", "TypeScript", "Python", "PHP", "Java", "C++", "HTML/CSS"],
+                frameworks: ["Angular", "Astro", "Vue.js", "Laravel", "Tailwind CSS", "Three.js"],
+                tools: ["Blender", "Git", "Figma", "Photoshop", "VS Code", "MongoDB", "MySQL"],
+                languages: ["Español (Nativo)", "Inglés (C2)", "Francés (B2)", "Japonés (Básico)"]
             }
         },
         gallery: {
@@ -194,10 +194,10 @@ export const translations = {
                 languages: "Languages"
             },
             items: {
-                programming: ["JavaScript", "TypeScript", "Python", "Java", "C++", "HTML/CSS"],
-                frameworks: ["Angular", "Astro", "Vue.js", "Tailwind CSS", "Three.js"],
-                tools: ["Blender", "Git", "Figma", "Photoshop", "VS Code", "MongoDB"],
-                languages: ["Spanish (Native)", "English (C1)", "French (B2)", "Japanese (Basic)"]
+                programming: ["JavaScript", "TypeScript", "Python", "PHP", "Java", "C++", "HTML/CSS"],
+                frameworks: ["Angular", "Astro", "Vue.js", "Laravel", "Tailwind CSS", "Three.js"],
+                tools: ["Blender", "Git", "Figma", "Photoshop", "VS Code", "MongoDB", "MySQL"],
+                languages: ["Spanish (Native)", "English (C2)", "French (B2)", "Japanese (Basic)"]
             }
         },
         gallery: {
@@ -317,10 +317,10 @@ export const translations = {
                 languages: "Langues"
             },
             items: {
-                programming: ["JavaScript", "TypeScript", "Python", "Java", "C++", "HTML/CSS"],
-                frameworks: ["Angular", "Astro", "Vue.js", "Tailwind CSS", "Three.js"],
-                tools: ["Blender", "Git", "Figma", "Photoshop", "VS Code", "MongoDB"],
-                languages: ["Espagnol (Natif)", "Anglais (C1)", "Français (B2)", "Japonais (Basique)"]
+                programming: ["JavaScript", "TypeScript", "Python", "PHP", "Java", "C++", "HTML/CSS"],
+                frameworks: ["Angular", "Astro", "Vue.js", "Laravel", "Tailwind CSS", "Three.js"],
+                tools: ["Blender", "Git", "Figma", "Photoshop", "VS Code", "MongoDB", "MySQL"],
+                languages: ["Espagnol (Natif)", "Anglais (C2)", "Français (B2)", "Japonais (Basique)"]
             }
         },
         gallery: {
